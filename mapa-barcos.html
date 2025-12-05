@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking de Barcos - Progan</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif;
+        }
+        #map { 
+            height: 100vh; 
+            width: 100vw; 
+        }
+        .ship-icon { 
+            font-size: 32px; 
+            text-align: center;
+        }
+        .leaflet-popup-content {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .titulo {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+            z-index: 1000;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="titulo">
+        <h3 style="margin: 0;">🚢 Tracking de Barcos - Progan del Caribe</h3>
+    </div>
+    <div id="map"></div>
+    
+    <script>
+        // Inicializar mapa
+        var map = L.map('map').setView([15, -120], 3);
+        
+        // Agregar capa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Definir icono de barco
+        var shipIcon = L.divIcon({
+            html: '⛴️',
+            iconSize: [40, 40],
+            className: 'ship-icon'
+        });
+        
+        // Leer datos de la URL
+        var params = new URLSearchParams(window.location.search);
+        var data = params.get('data');
+        
+        if (data) {
+            var ships = data.split(',');
+            var bounds = [];
+            
+            ships.forEach(function(ship) {
+                var parts = ship.split('|');
+                var operation = parts[0];
+                var lat = parseFloat(parts[1]);
+                var lon = parseFloat(parts[2]);
+                var containers = parts[3];
+                
+                // Agregar marcador
+                var marker = L.marker([lat, lon], {icon: shipIcon})
+                    .bindPopup(
+                        '<b>' + operation + '</b><br>' +
+                        'Contenedores: ' + containers + '<br>' +
+                        'Lat: ' + lat.toFixed(2) + '<br>' +
+                        'Lon: ' + lon.toFixed(2)
+                    )
+                    .addTo(map);
+                
+                bounds.push([lat, lon]);
+            });
+            
+            // Ajustar vista para mostrar todos los barcos
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, {padding: [50, 50]});
+            }
+        } else {
+            // Datos de ejemplo si no hay parámetros
+            var ejemploBarcos = [
+                {nombre: 'DAR-HVP65-001', lat: 24.38, lon: -80.56, containers: 10},
+                {nombre: 'DAR-HVP65-005', lat: 10.61, lon: -79.52, containers: 9},
+                {nombre: 'DAR-HVP65-007', lat: 27.36, lon: -77.03, containers: 3}
+            ];
+            
+            ejemploBarcos.forEach(function(barco) {
+                L.marker([barco.lat, barco.lon], {icon: shipIcon})
+                    .bindPopup(
+                        '<b>' + barco.nombre + '</b><br>' +
+                        'Contenedores: ' + barco.containers
+                    )
+                    .addTo(map);
+            });
+        }
+    </script>
+</body>
+</html>
