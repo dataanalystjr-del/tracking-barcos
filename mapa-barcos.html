@@ -7,36 +7,16 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        body { 
-            margin: 0; 
-            font-family: Arial, sans-serif;
-        }
-        #map { 
-            height: 100vh; 
-            width: 100vw; 
-        }
-        .ship-icon { 
-            font-size: 40px; 
-            text-align: center;
-        }
-        .leaflet-popup-content {
-            font-size: 13px;
-            line-height: 1.6;
-        }
+        body { margin: 0; font-family: Arial, sans-serif; }
+        #map { height: 100vh; width: 100vw; }
+        .ship-icon { font-size: 40px; text-align: center; }
+        .leaflet-popup-content { font-size: 13px; line-height: 1.6; }
         .titulo {
-            position: absolute;
-            top: 10px;
-            left: 50px;
-            z-index: 1000;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            position: absolute; top: 10px; left: 50px; z-index: 1000;
+            background: white; padding: 10px 20px; border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        .operacion-item {
-            padding: 3px 0;
-            border-bottom: 1px solid #eee;
-        }
+        .operacion-item { padding: 3px 0; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -46,11 +26,38 @@
     <div id="map"></div>
     
     <script>
-        var map = L.map('map').setView([15, -120], 3);
+        var map = L.map('map').setView([0, 30], 2);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
+        
+        // RUTA CORRECTA VÍA ÁFRICA
+        var rutaNavegacion = [
+            [32.083541, -81.099834],   // Savannah
+            [10.0, -40.0],              // Atlántico Sur
+            [-10.0, -10.0],             // Costa África Oeste
+            [-34.357, 18.473],          // Cabo de Buena Esperanza
+            [-20.0, 40.0],              // Océano Índico Sur
+            [0.0, 60.0],                // Océano Índico Norte
+            [5.0, 90.0],                // Cerca de Sri Lanka
+            [10.757570, 106.720700]     // Vung Tau / Ho Chi Minh
+        ];
+        
+        L.polyline(rutaNavegacion, {
+            color: '#003366',
+            weight: 3,
+            opacity: 0.5,
+            dashArray: '10, 10'
+        }).addTo(map);
+        
+        L.marker([32.083541, -81.099834])
+            .bindPopup('<b>🏁 Savannah, GA (USA)</b><br>Puerto de Origen')
+            .addTo(map);
+            
+        L.marker([10.757570, 106.720700])
+            .bindPopup('<b>🎯 Vung Tau (Vietnam)</b><br>Puerto de Destino')
+            .addTo(map);
         
         var shipIcon = L.divIcon({
             html: '🚢',
@@ -64,8 +71,6 @@
         if (data) {
             var operations = data.split(',');
             var bounds = [];
-            
-            // AGRUPAR POR ETD
             var barcosPorETD = {};
             
             operations.forEach(function(op) {
@@ -78,22 +83,17 @@
                 
                 if (!barcosPorETD[etd]) {
                     barcosPorETD[etd] = {
-                        etd: etd,
-                        lat: lat,
-                        lon: lon,
-                        operaciones: [],
-                        totalContainers: 0
+                        etd: etd, lat: lat, lon: lon,
+                        operaciones: [], totalContainers: 0
                     };
                 }
                 
                 barcosPorETD[etd].operaciones.push({
-                    nombre: operation,
-                    containers: containers
+                    nombre: operation, containers: containers
                 });
                 barcosPorETD[etd].totalContainers += parseInt(containers);
             });
             
-            // CREAR MARCADORES POR BARCO
             Object.values(barcosPorETD).forEach(function(barco) {
                 var operacionesList = barco.operaciones.map(function(op) {
                     return '<div class="operacion-item">📦 ' + op.nombre + ' (' + op.containers + ' cont.)</div>';
