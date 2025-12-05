@@ -62,66 +62,62 @@
         var data = params.get('data');
         
         if (data) {
-            var ships = data.split(',');
+            var operations = data.split(',');
             var bounds = [];
             
-            console.log('Total de barcos:', ships.length);
+            // AGRUPAR POR ETD
+            var barcosPorETD = {};
             
-            ships.forEach(function(ship, index) {
-                var parts = ship.split('|');
-                var etd = parts[0];
-                var lat = parseFloat(parts[1]);
-                var lon = parseFloat(parts[2]);
-                var containers = parts[3];
-                var operaciones = parts[4];
+            operations.forEach(function(op) {
+                var parts = op.split('|');
+                var operation = parts[0];
+                var etd = parts[1];
+                var lat = parseFloat(parts[2]);
+                var lon = parseFloat(parts[3]);
+                var containers = parts[4];
                 
-                // Crear lista HTML de operaciones
-                var operacionesList = operaciones.split(', ').map(function(op) {
-                    return '<div class="operacion-item">📦 ' + op + '</div>';
+                if (!barcosPorETD[etd]) {
+                    barcosPorETD[etd] = {
+                        etd: etd,
+                        lat: lat,
+                        lon: lon,
+                        operaciones: [],
+                        totalContainers: 0
+                    };
+                }
+                
+                barcosPorETD[etd].operaciones.push({
+                    nombre: operation,
+                    containers: containers
+                });
+                barcosPorETD[etd].totalContainers += parseInt(containers);
+            });
+            
+            // CREAR MARCADORES POR BARCO
+            Object.values(barcosPorETD).forEach(function(barco) {
+                var operacionesList = barco.operaciones.map(function(op) {
+                    return '<div class="operacion-item">📦 ' + op.nombre + ' (' + op.containers + ' cont.)</div>';
                 }).join('');
                 
-                var marker = L.marker([lat, lon], {icon: shipIcon})
+                var marker = L.marker([barco.lat, barco.lon], {icon: shipIcon})
                     .bindPopup(
-                        '<b>🚢 Barco - Salida: ' + etd + '</b><br>' +
-                        '<b>Total Containers: ' + containers + '</b><br>' +
+                        '<b>🚢 Barco - Salida: ' + barco.etd + '</b><br>' +
+                        '<b>Total Containers: ' + barco.totalContainers + '</b><br>' +
                         '<hr style="margin: 8px 0;">' +
-                        '<b>Operaciones a bordo:</b><br>' +
+                        '<b>Operaciones a bordo (' + barco.operaciones.length + '):</b><br>' +
                         operacionesList +
                         '<hr style="margin: 8px 0;">' +
-                        'Posición: ' + lat.toFixed(2) + ', ' + lon.toFixed(2),
+                        'Posición: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
                         {maxWidth: 300}
                     )
                     .addTo(map);
                 
-                bounds.push([lat, lon]);
+                bounds.push([barco.lat, barco.lon]);
             });
             
             if (bounds.length > 0) {
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
-        } else {
-            // Ejemplo
-            var ejemploBarcos = [
-                {etd: '18/11/25', lat: 24.38, lon: -80.56, containers: 30, ops: 'DAR-HVP65-001, DAR-HVP65-002'},
-                {etd: '02/12/25', lat: 27.36, lon: -77.03, containers: 22, ops: 'DAR-HVP65-005, DAR-HVP65-006, DAR-HVP65-007'}
-            ];
-            
-            ejemploBarcos.forEach(function(barco) {
-                var operacionesList = barco.ops.split(', ').map(function(op) {
-                    return '<div class="operacion-item">📦 ' + op + '</div>';
-                }).join('');
-                
-                L.marker([barco.lat, barco.lon], {icon: shipIcon})
-                    .bindPopup(
-                        '<b>🚢 Barco - Salida: ' + barco.etd + '</b><br>' +
-                        '<b>Total Containers: ' + barco.containers + '</b><br>' +
-                        '<hr style="margin: 8px 0;">' +
-                        '<b>Operaciones a bordo:</b><br>' +
-                        operacionesList,
-                        {maxWidth: 300}
-                    )
-                    .addTo(map);
-            });
         }
     </script>
 </body>
