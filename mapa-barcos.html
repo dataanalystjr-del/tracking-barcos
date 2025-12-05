@@ -101,13 +101,13 @@
                 
                 var marker = L.marker([barco.lat, barco.lon], {icon: shipIcon})
                     .bindPopup(
-                        '<b>🚢 Barco - Salida: ' + barco.etd + '</b><br>' +
+                        '<b>🚢 Ship - Exit: ' + barco.etd + '</b><br>' +
                         '<b>Total Containers: ' + barco.totalContainers + '</b><br>' +
                         '<hr style="margin: 8px 0;">' +
-                        '<b>Operaciones a bordo (' + barco.operaciones.length + '):</b><br>' +
+                        '<b>Onboard Operations (' + barco.operaciones.length + '):</b><br>' +
                         operacionesList +
                         '<hr style="margin: 8px 0;">' +
-                        'Posición: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
+                        'Position: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
                         {maxWidth: 300}
                     )
                     .addTo(map);
@@ -122,3 +122,4 @@
     </script>
 </body>
 </html>
+
