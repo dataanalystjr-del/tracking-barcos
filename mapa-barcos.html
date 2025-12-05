@@ -16,11 +16,11 @@
             width: 100vw; 
         }
         .ship-icon { 
-            font-size: 32px; 
+            font-size: 40px; 
             text-align: center;
         }
         .leaflet-popup-content {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.6;
         }
         .titulo {
@@ -33,6 +33,10 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
+        .operacion-item {
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -42,40 +46,18 @@
     <div id="map"></div>
     
     <script>
-        // Inicializar mapa
         var map = L.map('map').setView([15, -120], 3);
         
-        // Agregar capa base
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
         
-        // Definir icono de barco
         var shipIcon = L.divIcon({
             html: '🚢',
             iconSize: [50, 50],
             className: 'ship-icon'
         });
         
-        // FUNCIÓN PARA EVITAR SUPERPOSICIÓN
-        var posiciones = {};
-        function ajustarPosicion(lat, lon) {
-            var key = lat.toFixed(1) + ',' + lon.toFixed(1);
-            if (posiciones[key]) {
-                // Si ya hay un barco cerca, desplazar ligeramente
-                posiciones[key]++;
-                var offset = posiciones[key] * 0.3; // Desplazamiento en grados
-                return {
-                    lat: lat + (Math.random() - 0.5) * offset,
-                    lon: lon + (Math.random() - 0.5) * offset
-                };
-            } else {
-                posiciones[key] = 1;
-                return {lat: lat, lon: lon};
-            }
-        }
-        
-        // Leer datos de la URL
         var params = new URLSearchParams(window.location.search);
         var data = params.get('data');
         
@@ -83,53 +65,60 @@
             var ships = data.split(',');
             var bounds = [];
             
-            console.log('Total de barcos recibidos:', ships.length);
+            console.log('Total de barcos:', ships.length);
             
             ships.forEach(function(ship, index) {
                 var parts = ship.split('|');
-                var operation = parts[0];
+                var etd = parts[0];
                 var lat = parseFloat(parts[1]);
                 var lon = parseFloat(parts[2]);
                 var containers = parts[3];
+                var operaciones = parts[4];
                 
-                console.log('Barco #' + (index+1) + ':', operation, lat, lon);
+                // Crear lista HTML de operaciones
+                var operacionesList = operaciones.split(', ').map(function(op) {
+                    return '<div class="operacion-item">📦 ' + op + '</div>';
+                }).join('');
                 
-                // Ajustar posición si hay superposición
-                var pos = ajustarPosicion(lat, lon);
-                
-                // Agregar marcador
-                var marker = L.marker([pos.lat, pos.lon], {icon: shipIcon})
+                var marker = L.marker([lat, lon], {icon: shipIcon})
                     .bindPopup(
-                        '<b>' + operation + '</b><br>' +
-                        'Containers: ' + containers + '<br>' +
-                        'Lat: ' + lat.toFixed(2) + '<br>' +
-                        'Lon: ' + lon.toFixed(2)
+                        '<b>🚢 Barco - Salida: ' + etd + '</b><br>' +
+                        '<b>Total Containers: ' + containers + '</b><br>' +
+                        '<hr style="margin: 8px 0;">' +
+                        '<b>Operaciones a bordo:</b><br>' +
+                        operacionesList +
+                        '<hr style="margin: 8px 0;">' +
+                        'Posición: ' + lat.toFixed(2) + ', ' + lon.toFixed(2),
+                        {maxWidth: 300}
                     )
                     .addTo(map);
                 
-                bounds.push([pos.lat, pos.lon]);
+                bounds.push([lat, lon]);
             });
             
-            console.log('Total de marcadores agregados:', bounds.length);
-            
-            // Ajustar vista para mostrar todos los barcos
             if (bounds.length > 0) {
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
         } else {
-            // Datos de ejemplo si no hay parámetros
+            // Ejemplo
             var ejemploBarcos = [
-                {nombre: 'DAR-HVP65-001', lat: 24.38, lon: -80.56, containers: 10},
-                {nombre: 'DAR-HVP65-005', lat: 10.61, lon: -79.52, containers: 9},
-                {nombre: 'DAR-HVP65-007', lat: 27.36, lon: -77.03, containers: 3}
+                {etd: '18/11/25', lat: 24.38, lon: -80.56, containers: 30, ops: 'DAR-HVP65-001, DAR-HVP65-002'},
+                {etd: '02/12/25', lat: 27.36, lon: -77.03, containers: 22, ops: 'DAR-HVP65-005, DAR-HVP65-006, DAR-HVP65-007'}
             ];
             
             ejemploBarcos.forEach(function(barco) {
-                var pos = ajustarPosicion(barco.lat, barco.lon);
-                L.marker([pos.lat, pos.lon], {icon: shipIcon})
+                var operacionesList = barco.ops.split(', ').map(function(op) {
+                    return '<div class="operacion-item">📦 ' + op + '</div>';
+                }).join('');
+                
+                L.marker([barco.lat, barco.lon], {icon: shipIcon})
                     .bindPopup(
-                        '<b>' + barco.nombre + '</b><br>' +
-                        'Contenedores: ' + barco.containers
+                        '<b>🚢 Barco - Salida: ' + barco.etd + '</b><br>' +
+                        '<b>Total Containers: ' + barco.containers + '</b><br>' +
+                        '<hr style="margin: 8px 0;">' +
+                        '<b>Operaciones a bordo:</b><br>' +
+                        operacionesList,
+                        {maxWidth: 300}
                     )
                     .addTo(map);
             });
