@@ -57,6 +57,24 @@
             className: 'ship-icon'
         });
         
+        // FUNCIÓN PARA EVITAR SUPERPOSICIÓN
+        var posiciones = {};
+        function ajustarPosicion(lat, lon) {
+            var key = lat.toFixed(1) + ',' + lon.toFixed(1);
+            if (posiciones[key]) {
+                // Si ya hay un barco cerca, desplazar ligeramente
+                posiciones[key]++;
+                var offset = posiciones[key] * 0.3; // Desplazamiento en grados
+                return {
+                    lat: lat + (Math.random() - 0.5) * offset,
+                    lon: lon + (Math.random() - 0.5) * offset
+                };
+            } else {
+                posiciones[key] = 1;
+                return {lat: lat, lon: lon};
+            }
+        }
+        
         // Leer datos de la URL
         var params = new URLSearchParams(window.location.search);
         var data = params.get('data');
@@ -65,15 +83,22 @@
             var ships = data.split(',');
             var bounds = [];
             
-            ships.forEach(function(ship) {
+            console.log('Total de barcos recibidos:', ships.length);
+            
+            ships.forEach(function(ship, index) {
                 var parts = ship.split('|');
                 var operation = parts[0];
                 var lat = parseFloat(parts[1]);
                 var lon = parseFloat(parts[2]);
                 var containers = parts[3];
                 
+                console.log('Barco #' + (index+1) + ':', operation, lat, lon);
+                
+                // Ajustar posición si hay superposición
+                var pos = ajustarPosicion(lat, lon);
+                
                 // Agregar marcador
-                var marker = L.marker([lat, lon], {icon: shipIcon})
+                var marker = L.marker([pos.lat, pos.lon], {icon: shipIcon})
                     .bindPopup(
                         '<b>' + operation + '</b><br>' +
                         'Containers: ' + containers + '<br>' +
@@ -82,8 +107,10 @@
                     )
                     .addTo(map);
                 
-                bounds.push([lat, lon]);
+                bounds.push([pos.lat, pos.lon]);
             });
+            
+            console.log('Total de marcadores agregados:', bounds.length);
             
             // Ajustar vista para mostrar todos los barcos
             if (bounds.length > 0) {
@@ -98,7 +125,8 @@
             ];
             
             ejemploBarcos.forEach(function(barco) {
-                L.marker([barco.lat, barco.lon], {icon: shipIcon})
+                var pos = ajustarPosicion(barco.lat, barco.lon);
+                L.marker([pos.lat, pos.lon], {icon: shipIcon})
                     .bindPopup(
                         '<b>' + barco.nombre + '</b><br>' +
                         'Contenedores: ' + barco.containers
@@ -109,6 +137,3 @@
     </script>
 </body>
 </html>
-
-
-
