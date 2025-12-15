@@ -17,6 +17,18 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .operacion-item { padding: 3px 0; border-bottom: 1px solid #eee; }
+        
+        @media (max-width: 768px) {
+            .titulo {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 8px 12px;
+            }
+            .titulo h3 {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -26,31 +38,103 @@
     <div id="map"></div>
     
     <script>
+        // ============================================
+        // FUNCIÓN PARA AJUSTAR COORDENADAS MARÍTIMAS
+        // ============================================
+        function ajustarCoordenadasMaritimas(lat, lon) {
+            // Zona 1: Costa Este de USA (Savannah)
+            if (lon < -60 && lat > 25 && lat < 35) {
+                return {
+                    lat: lat, 
+                    lon: Math.max(lon, -81)  // No más al oeste que Savannah
+                };
+            }
+            
+            // Zona 2: Atlántico Norte (Ruta hacia África)
+            if (lon >= -60 && lon < -10 && lat > 0 && lat < 35) {
+                return {lat: lat, lon: lon}; // Océano abierto, OK
+            }
+            
+            // Zona 3: Atlántico Sur
+            if (lon >= -40 && lon < 0 && lat <= 0 && lat > -30) {
+                return {lat: lat, lon: lon}; // Océano abierto, OK
+            }
+            
+            // Zona 4: Costa Oeste de África (CRÍTICO - aquí suelen caer en tierra)
+            if (lon >= -5 && lon < 20 && lat >= -15 && lat <= 10) {
+                // Empujar hacia el oeste, al océano Atlántico
+                return {
+                    lat: lat, 
+                    lon: -10  // Posición segura en el Atlántico
+                };
+            }
+            
+            // Zona 5: Región del Cabo de Buena Esperanza
+            if (lon >= 10 && lon <= 30 && lat >= -36 && lat < -25) {
+                // Si está muy cerca de la costa, empujar al océano
+                if (lon > 15 && lon < 25) {
+                    return {
+                        lat: Math.min(lat, -33),  // Empujar más al sur
+                        lon: 17  // Posición en el océano
+                    };
+                }
+                return {lat: lat, lon: lon};
+            }
+            
+            // Zona 6: Océano Índico Sur
+            if (lon > 30 && lon < 80 && lat >= -35 && lat < -10) {
+                return {lat: lat, lon: lon}; // Océano abierto, OK
+            }
+            
+            // Zona 7: Océano Índico Norte (hacia Asia)
+            if (lon >= 50 && lon < 95 && lat >= -10 && lat < 15) {
+                return {lat: lat, lon: lon}; // Océano abierto, OK
+            }
+            
+            // Zona 8: Mar de China / Estrecho de Malaca
+            if (lon >= 95 && lon < 105 && lat >= 0 && lat < 15) {
+                // Si está sobre tierra del sudeste asiático, ajustar
+                if (lat > 5 && lat < 12 && lon > 98 && lon < 103) {
+                    return {
+                        lat: lat,
+                        lon: 95  // Empujar al oeste, al océano
+                    };
+                }
+                return {lat: lat, lon: lon};
+            }
+            
+            // Zona 9: Costa de Vietnam (Destino)
+            if (lon >= 105 && lon <= 108 && lat >= 8 && lat <= 12) {
+                return {lat: lat, lon: lon}; // Costa de Vietnam, OK
+            }
+            
+            // Zona 10: Cualquier posición sobre tierra continental
+            // Detectar si está claramente sobre masa continental
+            if (lon >= -10 && lon <= 50 && lat >= -5 && lat <= 40) {
+                // Probablemente sobre África o Medio Oriente
+                return {
+                    lat: lat,
+                    lon: -15  // Empujar al Atlántico
+                };
+            }
+            
+            // Por defecto, retornar coordenadas originales
+            return {lat: lat, lon: lon};
+        }
+        
+        // ============================================
+        // INICIALIZAR MAPA
+        // ============================================
         var map = L.map('map').setView([0, 30], 2);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
         }).addTo(map);
         
-        // RUTA CORRECTA VÍA ÁFRICA
-        var rutaNavegacion = [
-            [32.083541, -81.099834],   // Savannah
-            [10.0, -40.0],              // Atlántico Sur
-            [-10.0, -10.0],             // Costa África Oeste
-            [-34.357, 18.473],          // Cabo de Buena Esperanza
-            [-20.0, 40.0],              // Océano Índico Sur
-            [0.0, 60.0],                // Océano Índico Norte
-            [5.0, 90.0],                // Cerca de Sri Lanka
-            [10.757570, 106.720700]     // Vung Tau / Ho Chi Minh
-        ];
-        
-        L.polyline(rutaNavegacion, {
-            color: '#003366',
-            weight: 3,
-            opacity: 0.5,
-            dashArray: '10, 10'
-        }).addTo(map);
-        
+        // ============================================
+        // MARCADORES DE PUERTOS
+        // ============================================
         L.marker([32.083541, -81.099834])
             .bindPopup('<b>🏁 Savannah, GA (USA)</b><br>Puerto de Origen')
             .addTo(map);
@@ -59,12 +143,20 @@
             .bindPopup('<b>🎯 Vung Tau (Vietnam)</b><br>Puerto de Destino')
             .addTo(map);
         
+        // ============================================
+        // ÍCONO DE BARCO
+        // ============================================
         var shipIcon = L.divIcon({
             html: '🚢',
             iconSize: [50, 50],
+            iconAnchor: [25, 25],
+            popupAnchor: [0, -25],
             className: 'ship-icon'
         });
         
+        // ============================================
+        // PROCESAR DATOS DE POWER BI
+        // ============================================
         var params = new URLSearchParams(window.location.search);
         var data = params.get('data');
         
@@ -75,25 +167,51 @@
             
             operations.forEach(function(op) {
                 var parts = op.split('|');
-                var operation = parts[0];
+                
+                // Validar formato
+                if (parts.length !== 5) {
+                    console.warn('Formato inválido:', op);
+                    return;
+                }
+                
+                var operation = parts[0].replace(/_/g, ' '); // Restaurar espacios
                 var etd = parts[1];
                 var lat = parseFloat(parts[2]);
                 var lon = parseFloat(parts[3]);
                 var containers = parts[4];
                 
+                // Validar coordenadas
+                if (isNaN(lat) || isNaN(lon)) {
+                    console.warn('Coordenadas inválidas:', lat, lon);
+                    return;
+                }
+                
+                // ✨ AJUSTAR COORDENADAS PARA EVITAR TIERRA
+                var coordAjustadas = ajustarCoordenadasMaritimas(lat, lon);
+                lat = coordAjustadas.lat;
+                lon = coordAjustadas.lon;
+                
+                // Agrupar por ETD (fecha de salida)
                 if (!barcosPorETD[etd]) {
                     barcosPorETD[etd] = {
-                        etd: etd, lat: lat, lon: lon,
-                        operaciones: [], totalContainers: 0
+                        etd: etd,
+                        lat: lat,
+                        lon: lon,
+                        operaciones: [],
+                        totalContainers: 0
                     };
                 }
                 
                 barcosPorETD[etd].operaciones.push({
-                    nombre: operation, containers: containers
+                    nombre: operation,
+                    containers: containers
                 });
-                barcosPorETD[etd].totalContainers += parseInt(containers);
+                barcosPorETD[etd].totalContainers += parseInt(containers) || 0;
             });
             
+            // ============================================
+            // CREAR MARCADORES DE BARCOS
+            // ============================================
             Object.values(barcosPorETD).forEach(function(barco) {
                 var operacionesList = barco.operaciones.map(function(op) {
                     return '<div class="operacion-item">📦 ' + op.nombre + ' (' + op.containers + ' cont.)</div>';
@@ -107,7 +225,7 @@
                         '<b>Onboard Operations (' + barco.operaciones.length + '):</b><br>' +
                         operacionesList +
                         '<hr style="margin: 8px 0;">' +
-                        'Position: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
+                        '📍 Position: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
                         {maxWidth: 300}
                     )
                     .addTo(map);
@@ -115,11 +233,28 @@
                 bounds.push([barco.lat, barco.lon]);
             });
             
+            // ============================================
+            // AJUSTAR VISTA DEL MAPA
+            // ============================================
             if (bounds.length > 0) {
+                // Incluir puertos en el ajuste de vista
+                bounds.push([32.083541, -81.099834]);
+                bounds.push([10.757570, 106.720700]);
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
+        } else {
+            // Sin datos: mostrar ruta completa
+            map.fitBounds([
+                [32.083541, -81.099834],
+                [10.757570, 106.720700]
+            ]);
+            
+            // Mensaje informativo
+            L.popup()
+                .setLatLng([0, 30])
+                .setContent('<b>⚠️ No hay barcos en tránsito</b><br>Los datos se cargan desde Power BI')
+                .openOn(map);
         }
     </script>
 </body>
 </html>
-
