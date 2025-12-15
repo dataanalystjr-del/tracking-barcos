@@ -39,86 +39,119 @@
     
     <script>
         // ============================================
-        // FUNCIÓN PARA AJUSTAR COORDENADAS MARÍTIMAS
+        // FUNCIÓN MEJORADA PARA AJUSTAR COORDENADAS
         // ============================================
         function ajustarCoordenadasMaritimas(lat, lon) {
-            // Zona 1: Costa Este de USA (Savannah)
-            if (lon < -60 && lat > 25 && lat < 35) {
-                return {
-                    lat: lat, 
-                    lon: Math.max(lon, -81)  // No más al oeste que Savannah
-                };
-            }
+            console.log('Coordenadas originales:', lat, lon);
             
-            // Zona 2: Atlántico Norte (Ruta hacia África)
-            if (lon >= -60 && lon < -10 && lat > 0 && lat < 35) {
-                return {lat: lat, lon: lon}; // Océano abierto, OK
-            }
-            
-            // Zona 3: Atlántico Sur
-            if (lon >= -40 && lon < 0 && lat <= 0 && lat > -30) {
-                return {lat: lat, lon: lon}; // Océano abierto, OK
-            }
-            
-            // Zona 4: Costa Oeste de África (CRÍTICO - aquí suelen caer en tierra)
-            if (lon >= -5 && lon < 20 && lat >= -15 && lat <= 10) {
-                // Empujar hacia el oeste, al océano Atlántico
-                return {
-                    lat: lat, 
-                    lon: -10  // Posición segura en el Atlántico
-                };
-            }
-            
-            // Zona 5: Región del Cabo de Buena Esperanza
-            if (lon >= 10 && lon <= 30 && lat >= -36 && lat < -25) {
-                // Si está muy cerca de la costa, empujar al océano
-                if (lon > 15 && lon < 25) {
-                    return {
-                        lat: Math.min(lat, -33),  // Empujar más al sur
-                        lon: 17  // Posición en el océano
-                    };
-                }
-                return {lat: lat, lon: lon};
-            }
-            
-            // Zona 6: Océano Índico Sur
-            if (lon > 30 && lon < 80 && lat >= -35 && lat < -10) {
-                return {lat: lat, lon: lon}; // Océano abierto, OK
-            }
-            
-            // Zona 7: Océano Índico Norte (hacia Asia)
-            if (lon >= 50 && lon < 95 && lat >= -10 && lat < 15) {
-                return {lat: lat, lon: lon}; // Océano abierto, OK
-            }
-            
-            // Zona 8: Mar de China / Estrecho de Malaca
-            if (lon >= 95 && lon < 105 && lat >= 0 && lat < 15) {
-                // Si está sobre tierra del sudeste asiático, ajustar
-                if (lat > 5 && lat < 12 && lon > 98 && lon < 103) {
-                    return {
-                        lat: lat,
-                        lon: 95  // Empujar al oeste, al océano
-                    };
-                }
-                return {lat: lat, lon: lon};
-            }
-            
-            // Zona 9: Costa de Vietnam (Destino)
-            if (lon >= 105 && lon <= 108 && lat >= 8 && lat <= 12) {
-                return {lat: lat, lon: lon}; // Costa de Vietnam, OK
-            }
-            
-            // Zona 10: Cualquier posición sobre tierra continental
-            // Detectar si está claramente sobre masa continental
-            if (lon >= -10 && lon <= 50 && lat >= -5 && lat <= 40) {
-                // Probablemente sobre África o Medio Oriente
+            // ========================================
+            // ZONA CRÍTICA: COSTA ESTE DE SUDÁFRICA
+            // ========================================
+            // Durban, Port Elizabeth, East London - SIEMPRE sobre tierra
+            if (lon >= 25 && lon <= 33 && lat >= -35 && lat <= -25) {
+                console.log('Detectado sobre costa este de Sudáfrica - Ajustando...');
                 return {
                     lat: lat,
-                    lon: -15  // Empujar al Atlántico
+                    lon: 35  // Empujar al este, al Océano Índico
                 };
+            }
+            
+            // ========================================
+            // ZONA CRÍTICA: COSTA OESTE DE ÁFRICA
+            // ========================================
+            // Namibia, Angola, Congo, Nigeria, etc.
+            if (lon >= -5 && lon < 20 && lat >= -20 && lat <= 10) {
+                console.log('Detectado sobre costa oeste de África - Ajustando...');
+                return {
+                    lat: lat,
+                    lon: -12  // Empujar al oeste, al Atlántico
+                };
+            }
+            
+            // ========================================
+            // ZONA CRÍTICA: INTERIOR DE ÁFRICA
+            // ========================================
+            // Cualquier punto en el continente africano
+            if (lon >= 10 && lon <= 40 && lat >= -25 && lat <= 20) {
+                console.log('Detectado sobre interior de África - Ajustando...');
+                // Si está al sur del ecuador, empujar al Índico
+                if (lat < 0) {
+                    return {
+                        lat: lat,
+                        lon: 42  // Océano Índico
+                    };
+                }
+                // Si está al norte, empujar al Atlántico
+                return {
+                    lat: lat,
+                    lon: -12  // Océano Atlántico
+                };
+            }
+            
+            // ========================================
+            // CABO DE BUENA ESPERANZA
+            // ========================================
+            if (lon >= 15 && lon < 25 && lat >= -36 && lat < -28) {
+                console.log('Zona del Cabo - OK o ajustando...');
+                // Si está MUY cerca de la punta, OK
+                if (lon >= 18 && lon <= 20 && lat >= -35 && lat <= -33) {
+                    return {lat: lat, lon: lon};
+                }
+                // Sino, empujar al sur
+                return {
+                    lat: -34.5,
+                    lon: 18.5  // Posición en el océano al sur del Cabo
+                };
+            }
+            
+            // ========================================
+            // COSTA ESTE DE USA (Savannah)
+            // ========================================
+            if (lon < -60 && lat > 25 && lat < 35) {
+                return {
+                    lat: lat,
+                    lon: Math.max(lon, -81)
+                };
+            }
+            
+            // ========================================
+            // ATLÁNTICO SUR (Ruta abierta)
+            // ========================================
+            if (lon >= -50 && lon < -5 && lat >= -35 && lat < 5) {
+                console.log('Atlántico Sur - Océano abierto OK');
+                return {lat: lat, lon: lon};
+            }
+            
+            // ========================================
+            // OCÉANO ÍNDICO (Ruta abierta)
+            // ========================================
+            if (lon >= 35 && lon < 95 && lat >= -40 && lat < 10) {
+                console.log('Océano Índico - Océano abierto OK');
+                return {lat: lat, lon: lon};
+            }
+            
+            // ========================================
+            // SUDESTE ASIÁTICO
+            // ========================================
+            // Indonesia, Malasia - sobre tierra
+            if (lon >= 95 && lon < 105 && lat >= -5 && lat < 8) {
+                console.log('Detectado sobre Sudeste Asiático - Ajustando...');
+                return {
+                    lat: lat,
+                    lon: 93  // Empujar al oeste, al Índico
+                };
+            }
+            
+            // ========================================
+            // COSTA DE VIETNAM (Destino)
+            // ========================================
+            if (lon >= 105 && lon <= 108 && lat >= 8 && lat <= 12) {
+                console.log('Costa de Vietnam - Destino OK');
+                return {lat: lat, lon: lon};
             }
             
             // Por defecto, retornar coordenadas originales
+            console.log('Zona no identificada - Mantener coordenadas');
             return {lat: lat, lon: lon};
         }
         
@@ -168,19 +201,17 @@
             operations.forEach(function(op) {
                 var parts = op.split('|');
                 
-                // Validar formato
                 if (parts.length !== 5) {
                     console.warn('Formato inválido:', op);
                     return;
                 }
                 
-                var operation = parts[0].replace(/_/g, ' '); // Restaurar espacios
+                var operation = parts[0].replace(/_/g, ' ');
                 var etd = parts[1];
                 var lat = parseFloat(parts[2]);
                 var lon = parseFloat(parts[3]);
                 var containers = parts[4];
                 
-                // Validar coordenadas
                 if (isNaN(lat) || isNaN(lon)) {
                     console.warn('Coordenadas inválidas:', lat, lon);
                     return;
@@ -191,7 +222,8 @@
                 lat = coordAjustadas.lat;
                 lon = coordAjustadas.lon;
                 
-                // Agrupar por ETD (fecha de salida)
+                console.log('Coordenadas ajustadas:', lat, lon);
+                
                 if (!barcosPorETD[etd]) {
                     barcosPorETD[etd] = {
                         etd: etd,
@@ -233,23 +265,17 @@
                 bounds.push([barco.lat, barco.lon]);
             });
             
-            // ============================================
-            // AJUSTAR VISTA DEL MAPA
-            // ============================================
             if (bounds.length > 0) {
-                // Incluir puertos en el ajuste de vista
                 bounds.push([32.083541, -81.099834]);
                 bounds.push([10.757570, 106.720700]);
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
         } else {
-            // Sin datos: mostrar ruta completa
             map.fitBounds([
                 [32.083541, -81.099834],
                 [10.757570, 106.720700]
             ]);
             
-            // Mensaje informativo
             L.popup()
                 .setLatLng([0, 30])
                 .setContent('<b>⚠️ No hay barcos en tránsito</b><br>Los datos se cargan desde Power BI')
