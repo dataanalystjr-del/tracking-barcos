@@ -9,7 +9,7 @@
     <style>
         body { margin: 0; font-family: Arial, sans-serif; }
         #map { height: 100vh; width: 100vw; }
-        .ship-icon { font-size: 40px; text-align: center; }
+        .ship-icon { text-align: center; }
         .leaflet-popup-content { font-size: 13px; line-height: 1.6; }
         .titulo {
             position: absolute; top: 10px; left: 50px; z-index: 1000;
@@ -39,74 +39,57 @@
     
     <script>
         // ============================================
-        // FUNCIÓN MEJORADA PARA AJUSTAR COORDENADAS
+        // FUNCIÓN PARA AJUSTAR COORDENADAS MARÍTIMAS
         // ============================================
         function ajustarCoordenadasMaritimas(lat, lon) {
             console.log('Coordenadas originales:', lat, lon);
             
-            // ========================================
             // ZONA CRÍTICA: COSTA ESTE DE SUDÁFRICA
-            // ========================================
-            // Durban, Port Elizabeth, East London - SIEMPRE sobre tierra
             if (lon >= 25 && lon <= 33 && lat >= -35 && lat <= -25) {
                 console.log('Detectado sobre costa este de Sudáfrica - Ajustando...');
                 return {
                     lat: lat,
-                    lon: 35  // Empujar al este, al Océano Índico
+                    lon: 35
                 };
             }
             
-            // ========================================
             // ZONA CRÍTICA: COSTA OESTE DE ÁFRICA
-            // ========================================
-            // Namibia, Angola, Congo, Nigeria, etc.
             if (lon >= -5 && lon < 20 && lat >= -20 && lat <= 10) {
                 console.log('Detectado sobre costa oeste de África - Ajustando...');
                 return {
                     lat: lat,
-                    lon: -12  // Empujar al oeste, al Atlántico
+                    lon: -12
                 };
             }
             
-            // ========================================
             // ZONA CRÍTICA: INTERIOR DE ÁFRICA
-            // ========================================
-            // Cualquier punto en el continente africano
             if (lon >= 10 && lon <= 40 && lat >= -25 && lat <= 20) {
                 console.log('Detectado sobre interior de África - Ajustando...');
-                // Si está al sur del ecuador, empujar al Índico
                 if (lat < 0) {
                     return {
                         lat: lat,
-                        lon: 42  // Océano Índico
+                        lon: 42
                     };
                 }
-                // Si está al norte, empujar al Atlántico
                 return {
                     lat: lat,
-                    lon: -12  // Océano Atlántico
+                    lon: -12
                 };
             }
             
-            // ========================================
             // CABO DE BUENA ESPERANZA
-            // ========================================
             if (lon >= 15 && lon < 25 && lat >= -36 && lat < -28) {
                 console.log('Zona del Cabo - OK o ajustando...');
-                // Si está MUY cerca de la punta, OK
                 if (lon >= 18 && lon <= 20 && lat >= -35 && lat <= -33) {
                     return {lat: lat, lon: lon};
                 }
-                // Sino, empujar al sur
                 return {
                     lat: -34.5,
-                    lon: 18.5  // Posición en el océano al sur del Cabo
+                    lon: 18.5
                 };
             }
             
-            // ========================================
             // COSTA ESTE DE USA (Savannah)
-            // ========================================
             if (lon < -60 && lat > 25 && lat < 35) {
                 return {
                     lat: lat,
@@ -114,43 +97,33 @@
                 };
             }
             
-            // ========================================
             // ATLÁNTICO SUR (Ruta abierta)
-            // ========================================
             if (lon >= -50 && lon < -5 && lat >= -35 && lat < 5) {
                 console.log('Atlántico Sur - Océano abierto OK');
                 return {lat: lat, lon: lon};
             }
             
-            // ========================================
             // OCÉANO ÍNDICO (Ruta abierta)
-            // ========================================
             if (lon >= 35 && lon < 95 && lat >= -40 && lat < 10) {
                 console.log('Océano Índico - Océano abierto OK');
                 return {lat: lat, lon: lon};
             }
             
-            // ========================================
             // SUDESTE ASIÁTICO
-            // ========================================
-            // Indonesia, Malasia - sobre tierra
             if (lon >= 95 && lon < 105 && lat >= -5 && lat < 8) {
                 console.log('Detectado sobre Sudeste Asiático - Ajustando...');
                 return {
                     lat: lat,
-                    lon: 93  // Empujar al oeste, al Índico
+                    lon: 93
                 };
             }
             
-            // ========================================
             // COSTA DE VIETNAM (Destino)
-            // ========================================
             if (lon >= 105 && lon <= 108 && lat >= 8 && lat <= 12) {
                 console.log('Costa de Vietnam - Destino OK');
                 return {lat: lat, lon: lon};
             }
             
-            // Por defecto, retornar coordenadas originales
             console.log('Zona no identificada - Mantener coordenadas');
             return {lat: lat, lon: lon};
         }
@@ -177,13 +150,49 @@
             .addTo(map);
         
         // ============================================
-        // ÍCONO DE BARCO
+        // ÍCONO SVG DE BARCO (Apuntando a la derecha)
         // ============================================
         var shipIcon = L.divIcon({
-    html: '<div style="transform: rotate(-180deg);">🚢</div>',
-            iconSize: [50, 50],
-            iconAnchor: [25, 25],
-            popupAnchor: [0, -25],
+            html: `<svg width="45" height="45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(50,50)">
+                    <!-- Casco principal del barco -->
+                    <polygon points="-35,15 25,15 35,25 -45,25" fill="#C41E3A" stroke="#8B0000" stroke-width="2.5"/>
+                    <polygon points="-30,5 20,5 25,15 -35,15" fill="#E63946" stroke="#8B0000" stroke-width="2"/>
+                    
+                    <!-- Cubierta -->
+                    <polygon points="-25,-5 15,-5 20,5 -30,5" fill="#DC143C" stroke="#8B0000" stroke-width="1.5"/>
+                    
+                    <!-- Cabina/Puente -->
+                    <rect x="-15" y="-18" width="25" height="13" rx="2" fill="#2C5F8D" stroke="#1B3A57" stroke-width="1.5"/>
+                    
+                    <!-- Ventanas de la cabina -->
+                    <rect x="-12" y="-15" width="5" height="4" fill="#87CEEB" stroke="#1B3A57" stroke-width="0.5"/>
+                    <rect x="-5" y="-15" width="5" height="4" fill="#87CEEB" stroke="#1B3A57" stroke-width="0.5"/>
+                    <rect x="2" y="-15" width="5" height="4" fill="#87CEEB" stroke="#1B3A57" stroke-width="0.5"/>
+                    
+                    <!-- Chimeneas -->
+                    <rect x="-8" y="-28" width="5" height="10" rx="1" fill="#4A4A4A" stroke="#000" stroke-width="1.2"/>
+                    <rect x="3" y="-28" width="5" height="10" rx="1" fill="#4A4A4A" stroke="#000" stroke-width="1.2"/>
+                    
+                    <!-- Humo de chimeneas -->
+                    <circle cx="-5" cy="-30" r="2.5" fill="#BEBEBE" opacity="0.6"/>
+                    <circle cx="-7" cy="-33" r="2" fill="#D3D3D3" opacity="0.5"/>
+                    <circle cx="5" cy="-30" r="2.5" fill="#BEBEBE" opacity="0.6"/>
+                    <circle cx="7" cy="-33" r="2" fill="#D3D3D3" opacity="0.5"/>
+                    
+                    <!-- Proa (punta hacia la derecha) -->
+                    <polygon points="25,15 40,20 25,25" fill="#8B0000"/>
+                    
+                    <!-- Detalles del casco -->
+                    <line x1="-35" y1="20" x2="25" y2="20" stroke="#8B0000" stroke-width="1" opacity="0.5"/>
+                    
+                    <!-- Ancla decorativa -->
+                    <circle cx="-20" cy="10" r="2" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+                </g>
+            </svg>`,
+            iconSize: [45, 45],
+            iconAnchor: [22, 22],
+            popupAnchor: [0, -22],
             className: 'ship-icon'
         });
         
@@ -265,6 +274,9 @@
                 bounds.push([barco.lat, barco.lon]);
             });
             
+            // ============================================
+            // AJUSTAR VISTA DEL MAPA
+            // ============================================
             if (bounds.length > 0) {
                 bounds.push([32.083541, -81.099834]);
                 bounds.push([10.757570, 106.720700]);
@@ -284,6 +296,3 @@
     </script>
 </body>
 </html>
-
-
-
