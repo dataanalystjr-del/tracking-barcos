@@ -130,7 +130,7 @@
         
         // ============================================
         // FUNCIÓN PARA OBTENER RUTA SEGÚN ORIGEN-DESTINO Y NAVIERA
-        // RUTAS SIMPLIFICADAS Y LÓGICAS (SIN BAJAR PARA VOLVER A SUBIR)
+        // WAYPOINTS CORREGIDOS - MÁS ALEJADOS DE LA COSTA (100-150km offshore)
         // ============================================
         function obtenerRuta(origen, destino, naviera) {
             var puertoOrigen = PUERTOS[normalizarPuerto(origen)];
@@ -163,32 +163,32 @@
                     // Cabo de Buena Esperanza
                     {lat: -35.8, lon: 18.0},
                     
-                    // Costa Este Sudáfrica (en el agua)
-                    {lat: -35.2, lon: 20.5},
-                    {lat: -34.5, lon: 23.0},
-                    {lat: -34.0, lon: 25.5},
-                    {lat: -33.0, lon: 27.5},
-                    {lat: -31.5, lon: 29.5},
-                    {lat: -29.8, lon: 31.0},      // Durban
-                    {lat: -27.5, lon: 32.5},
-                    {lat: -25.0, lon: 34.0},
-                    {lat: -22.0, lon: 35.5},
-                    {lat: -18.0, lon: 37.0},
-                    {lat: -15.0, lon: 38.5},
-                    {lat: -12.0, lon: 40.0},
-                    {lat: -9.0, lon: 41.5},
-                    {lat: -6.0, lon: 43.0},
-                    {lat: -3.0, lon: 45.0},
+                    // ⬇️ COSTA ESTE SUDÁFRICA - MÁS ALEJADOS (100-150km offshore)
+                    {lat: -35.2, lon: 21.5},      // Saliendo del Cabo (más al este)
+                    {lat: -34.5, lon: 24.0},      // Mossel Bay (más offshore)
+                    {lat: -34.0, lon: 26.5},      // Port Elizabeth (más offshore)
+                    {lat: -33.0, lon: 28.5},      // East London (más offshore)
+                    {lat: -31.5, lon: 30.5},      // KwaZulu-Natal (más offshore)
+                    {lat: -29.8, lon: 32.0},      // Durban area (MÁS AL ESTE - 100km offshore) ✅
+                    {lat: -27.5, lon: 33.5},      // Norte Durban (más offshore)
+                    {lat: -25.0, lon: 35.0},      // Richards Bay (MÁS AL ESTE - 100km offshore) ✅
+                    {lat: -22.0, lon: 36.5},      // Sur Mozambique (más offshore)
+                    {lat: -18.0, lon: 38.0},      // Inhambane (más offshore)
+                    {lat: -15.0, lon: 39.5},      // Beira (más offshore)
+                    {lat: -12.0, lon: 41.0},      // Mozambique Centro
+                    {lat: -9.0, lon: 42.5},       // Nacala
+                    {lat: -6.0, lon: 44.0},       // Mozambique Norte
+                    {lat: -3.0, lon: 46.0},       // Canal Mozambique Norte
                     
                     // Océano Índico Oeste
-                    {lat: 0.0, lon: 48.0},
-                    {lat: 2.0, lon: 53.0},
-                    {lat: 3.5, lon: 58.0},
-                    {lat: 4.5, lon: 64.0},
-                    {lat: 5.0, lon: 70.0},
+                    {lat: 0.0, lon: 49.0},
+                    {lat: 2.0, lon: 54.0},
+                    {lat: 3.5, lon: 59.0},
+                    {lat: 4.5, lon: 65.0},
+                    {lat: 5.0, lon: 71.0},
                     
                     // Sri Lanka
-                    {lat: 5.5, lon: 76.0},
+                    {lat: 5.5, lon: 77.0},
                     {lat: 6.0, lon: 80.0}         // Sri Lanka Este
                 ];
             }
@@ -205,33 +205,35 @@
                     {lat: -31.0, lon: -6.0},
                     {lat: -35.0, lon: 12.0},
                     {lat: -35.8, lon: 18.0},
-                    {lat: -35.2, lon: 20.5},
-                    {lat: -34.5, lon: 23.0},
-                    {lat: -34.0, lon: 25.5},
-                    {lat: -33.0, lon: 27.5},
-                    {lat: -31.5, lon: 29.5},
-                    {lat: -29.8, lon: 31.0},
-                    {lat: -27.5, lon: 32.5},
-                    {lat: -25.0, lon: 34.0},
-                    {lat: -22.0, lon: 35.5},
-                    {lat: -18.0, lon: 37.0},
-                    {lat: -15.0, lon: 38.5},
-                    {lat: -12.0, lon: 40.0},
-                    {lat: -9.0, lon: 41.5},
-                    {lat: -6.0, lon: 43.0},
-                    {lat: -3.0, lon: 45.0},
-                    {lat: 0.0, lon: 48.0},
-                    {lat: 2.0, lon: 53.0},
-                    {lat: 3.5, lon: 58.0},
-                    {lat: 4.5, lon: 64.0},
-                    {lat: 5.0, lon: 70.0},
-                    {lat: 5.5, lon: 76.0},
+                    
+                    // ⬇️ MISMOS PUNTOS CORREGIDOS
+                    {lat: -35.2, lon: 21.5},
+                    {lat: -34.5, lon: 24.0},
+                    {lat: -34.0, lon: 26.5},
+                    {lat: -33.0, lon: 28.5},
+                    {lat: -31.5, lon: 30.5},
+                    {lat: -29.8, lon: 32.0},      // Durban offshore ✅
+                    {lat: -27.5, lon: 33.5},
+                    {lat: -25.0, lon: 35.0},      // Richards Bay offshore ✅
+                    {lat: -22.0, lon: 36.5},
+                    {lat: -18.0, lon: 38.0},
+                    {lat: -15.0, lon: 39.5},
+                    {lat: -12.0, lon: 41.0},
+                    {lat: -9.0, lon: 42.5},
+                    {lat: -6.0, lon: 44.0},
+                    {lat: -3.0, lon: 46.0},
+                    {lat: 0.0, lon: 49.0},
+                    {lat: 2.0, lon: 54.0},
+                    {lat: 3.5, lon: 59.0},
+                    {lat: 4.5, lon: 65.0},
+                    {lat: 5.0, lon: 71.0},
+                    {lat: 5.5, lon: 77.0},
                     {lat: 6.0, lon: 80.0}
                 ];
             }
             
             // ============================================
-            // SEGMENTO FINAL SIMPLIFICADO Y DIRECTO
+            // SEGMENTO FINAL SIMPLIFICADO Y DIRECTO POR NAVIERA
             // Sri Lanka → Malaca → Singapur → Vietnam (sin bajadas innecesarias)
             // ============================================
             
