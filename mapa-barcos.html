@@ -63,37 +63,31 @@ const RUTAS_MARITIMAS = {
         {lat: 5.0, lon: 70.0, nombre: 'Índico Centro'},
         {lat: 5.0, lon: 78.0, nombre: 'Oeste Sri Lanka'},
         {lat: 3.0, lon: 82.0, nombre: 'Sur Sri Lanka'},
-        
-        // === CRÍTICO: GOLFO DE BENGALA - OESTE DE SUMATRA ===
         {lat: 3.0, lon: 86.0, nombre: 'Golfo Bengala Sur'},
         {lat: 4.0, lon: 88.0, nombre: 'Golfo Bengala Sureste'},
         {lat: 5.0, lon: 90.0, nombre: 'Golfo Bengala Este'},
+        
+        // === CRÍTICO: MAR DE ANDAMÁN - OESTE DE SUMATRA ===
         {lat: 6.0, lon: 91.5, nombre: 'Entrada Andamán'},
+        {lat: 6.5, lon: 92.5, nombre: 'Andamán Sur'},
+        {lat: 7.0, lon: 93.0, nombre: 'Andamán Suroeste'},
+        {lat: 7.5, lon: 93.5, nombre: 'Andamán Oeste Sumatra'},
+        {lat: 8.0, lon: 93.5, nombre: 'Andamán Centro-Oeste'},
+        {lat: 8.5, lon: 93.5, nombre: 'Andamán Centro'},
         
-        // === MUY CRÍTICO: MAR DE ANDAMÁN - BORDEANDO OESTE DE SUMATRA ===
-        // Sumatra comienza aprox en lon 95°, nos mantenemos en 92-94°
-        {lat: 7.0, lon: 92.0, nombre: 'Andamán Sur'},
-        {lat: 8.0, lon: 92.5, nombre: 'Andamán Suroeste'},
-        {lat: 9.0, lon: 93.0, nombre: 'Andamán Oeste'},
-        {lat: 10.0, lon: 93.0, nombre: 'Andamán Centro-Oeste'},
-        {lat: 11.0, lon: 93.0, nombre: 'Andamán Centro'},
-        {lat: 12.0, lon: 93.5, nombre: 'Andamán Norte'},
-        {lat: 13.0, lon: 94.0, nombre: 'Andamán Noreste'},
-        {lat: 14.0, lon: 94.5, nombre: 'Norte Andamán'},
-        
-        // === BORDEANDO EL NORTE DE SUMATRA ===
-        // Punta norte de Sumatra está aprox en lat 6°, vamos por lat 14-15°
-        {lat: 15.0, lon: 95.0, nombre: 'Norte Sumatra Lejano'},
-        {lat: 15.0, lon: 96.5, nombre: 'Muy Norte Sumatra'},
-        {lat: 14.5, lon: 98.0, nombre: 'Myanmar Costa'},
-        {lat: 13.5, lon: 99.5, nombre: 'Tailandia Sur'},
-        {lat: 12.5, lon: 100.5, nombre: 'Entrada Golfo Tailandia'},
+        // === GIRO AL ESTE - SIN SUBIR AL NORTE ===
+        // ⚠️ CLAVE: Girar al este en lat 8-9° (NO subir a 14-15°)
+        {lat: 9.0, lon: 94.0, nombre: 'Centro Andamán'},
+        {lat: 9.0, lon: 95.5, nombre: 'Este Andamán'}, // ⬅️ Giro al este en lat baja
+        {lat: 8.5, lon: 97.0, nombre: 'Oeste Islas Andamán'}, // ⬅️ Mar abierto
+        {lat: 8.5, lon: 98.5, nombre: 'Entre Andamán y Tailandia'}, // ⬅️ Océano
+        {lat: 9.0, lon: 100.0, nombre: 'Entrada Golfo Tailandia'}, // ⬅️ Por mar
         
         // === GOLFO DE TAILANDIA Y VIETNAM ===
-        {lat: 11.5, lon: 101.5, nombre: 'Golfo Tailandia Norte'},
-        {lat: 11.0, lon: 103.0, nombre: 'Golfo Tailandia Centro'},
-        {lat: 10.5, lon: 104.5, nombre: 'Golfo Tailandia Este'},
-        {lat: 10.6, lon: 105.8, nombre: 'Acercamiento Vietnam'},
+        {lat: 9.5, lon: 101.5, nombre: 'Golfo Tailandia Oeste'},
+        {lat: 10.0, lon: 103.0, nombre: 'Golfo Tailandia Centro'},
+        {lat: 10.3, lon: 104.5, nombre: 'Golfo Tailandia Este'},
+        {lat: 10.5, lon: 105.8, nombre: 'Acercamiento Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     
@@ -126,17 +120,12 @@ const RUTAS_MARITIMAS = {
         {lat: 4.0, lon: 83.0, nombre: 'Sur Sri Lanka'},
         {lat: 5.0, lon: 87.0, nombre: 'Golfo Bengala Sur'},
         {lat: 6.0, lon: 90.0, nombre: 'Golfo Bengala Este'},
-        
-        // === CRÍTICO: ENTRADA AL ESTRECHO DE MALACA ===
-        // Bordeamos costa OESTE de Sumatra primero
         {lat: 6.5, lon: 92.5, nombre: 'Antes Sumatra'},
-        {lat: 7.0, lon: 94.0, nombre: 'Oeste Sumatra Norte'},
-        {lat: 7.0, lon: 95.5, nombre: 'Muy Oeste Sumatra Norte'},
+        {lat: 7.0, lon: 94.5, nombre: 'Oeste Sumatra Norte'},
         
         // === ESTRECHO DE MALACA (Entre Sumatra y Península Malaya) ===
-        // El estrecho está entre lon 98-104°, lat 1-7°
-        {lat: 6.5, lon: 97.0, nombre: 'Entrada Malaca Norte'},
-        {lat: 6.0, lon: 98.5, nombre: 'Malaca Norte'},
+        {lat: 6.5, lon: 96.5, nombre: 'Entrada Malaca Norte'},
+        {lat: 6.0, lon: 98.0, nombre: 'Malaca Norte'},
         {lat: 5.0, lon: 99.5, nombre: 'Malaca Centro-Norte'},
         {lat: 4.0, lon: 100.5, nombre: 'Malaca Centro'},
         {lat: 3.0, lon: 101.5, nombre: 'Malaca Centro-Sur'},
@@ -174,18 +163,15 @@ const RUTAS_MARITIMAS = {
         {lat: -18.0, lon: 70.0, nombre: 'Índico Centro-Sur'},
         {lat: -10.0, lon: 76.0, nombre: 'Índico Este'},
         {lat: -5.0, lon: 81.0, nombre: 'Sur Sri Lanka'},
-        
-        // === CRÍTICO: SUR DE SUMATRA ===
-        // Sumatra va de lat -6° a +6°, nos mantenemos en lat negativas
         {lat: -5.0, lon: 86.0, nombre: 'Índico Sureste'},
         {lat: -5.5, lon: 90.0, nombre: 'Camino Sur Sumatra'},
+        
+        // === SUR DE SUMATRA ===
         {lat: -6.0, lon: 94.0, nombre: 'Sur Sumatra Oeste'},
         {lat: -6.5, lon: 98.0, nombre: 'Sur Sumatra Centro'},
         {lat: -7.0, lon: 102.0, nombre: 'Sur Sumatra Este'},
         {lat: -7.0, lon: 105.0, nombre: 'Estrecho Sunda Oeste'},
         {lat: -6.5, lon: 106.5, nombre: 'Estrecho Sunda'},
-        
-        // === MAR DE JAVA Y SUBIDA A VIETNAM ===
         {lat: -5.5, lon: 108.0, nombre: 'Mar Java Este'},
         {lat: -4.0, lon: 109.5, nombre: 'Mar Java Noreste'},
         {lat: -2.0, lon: 110.5, nombre: 'Salida Java'},
@@ -198,7 +184,6 @@ const RUTAS_MARITIMAS = {
     ],
     
     'DEFAULT': [
-        // Similar a HAPAG
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah'},
         {lat: 25.0, lon: -77.0, nombre: 'Florida'},
         {lat: 10.0, lon: -55.0, nombre: 'Caribe'},
@@ -211,10 +196,10 @@ const RUTAS_MARITIMAS = {
         {lat: 0.0, lon: 52.0, nombre: 'Índico'},
         {lat: 4.0, lon: 80.0, nombre: 'Sri Lanka'},
         {lat: 6.0, lon: 90.0, nombre: 'Bengala'},
-        {lat: 10.0, lon: 93.0, nombre: 'Andamán'},
-        {lat: 14.0, lon: 95.0, nombre: 'Norte Sumatra'},
-        {lat: 13.0, lon: 99.0, nombre: 'Tailandia'},
-        {lat: 11.0, lon: 103.0, nombre: 'Golfo Tailandia'},
+        {lat: 8.0, lon: 93.5, nombre: 'Andamán'},
+        {lat: 9.0, lon: 97.0, nombre: 'Este Andamán'},
+        {lat: 9.5, lon: 100.0, nombre: 'Golfo Tailandia'},
+        {lat: 10.0, lon: 103.0, nombre: 'Centro Golfo'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau'}
     ]
 };
@@ -449,6 +434,7 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
 
