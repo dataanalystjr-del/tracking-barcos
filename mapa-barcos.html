@@ -139,7 +139,7 @@ const RUTAS_MARITIMAS = {
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     
-    'ZIN': [
+   'ZIN': [
     // === AMÉRICA ===
     {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
     {lat: 25.0, lon: -75.0, nombre: 'Florida'},
@@ -170,32 +170,27 @@ const RUTAS_MARITIMAS = {
     {lat: -6.5, lon: 98.0, nombre: 'Sur Sumatra Centro'},
     {lat: -7.0, lon: 102.0, nombre: 'Sur Sumatra Este'},
     {lat: -7.5, lon: 105.0, nombre: 'Oeste Estrecho Sunda'},
+    {lat: -8.0, lon: 106.0, nombre: 'Estrecho de Sunda'},
     
-    // === ESTRECHO DE SUNDA (Entre Sumatra y Java) ===
-    {lat: -8.0, lon: 106.0, nombre: 'Estrecho de Sunda'}, // ⬅️ Entre islas
+    // === SUR DE JAVA ===
+    {lat: -8.5, lon: 108.0, nombre: 'Sur de Java Oeste'},
+    {lat: -9.0, lon: 110.0, nombre: 'Sur de Java Centro'},
+    {lat: -9.5, lon: 112.0, nombre: 'Sur de Java Este'},
+    {lat: -9.5, lon: 114.0, nombre: 'Este de Java (Bali)'},
     
-    // === SUR DE JAVA - MANTENER AL SUR ===
-    // ⚠️ CLAVE: Pasar al SUR de Java (lat -8° a -9°), NO sobre la isla
-    {lat: -8.5, lon: 108.0, nombre: 'Sur de Java Oeste'}, // ⬅️ Sur de la isla
-    {lat: -9.0, lon: 110.0, nombre: 'Sur de Java Centro'}, // ⬅️ Océano Índico Sur
-    {lat: -9.0, lon: 112.0, nombre: 'Sur de Java Este'}, // ⬅️ Sigue al sur
-    {lat: -8.5, lon: 114.0, nombre: 'Este de Java'}, // ⬅️ Pasó la isla
-    
-    // === SUBIDA AL NORTE - MAR DE BALI Y MAR DEL SUR DE CHINA ===
-    {lat: -7.0, lon: 116.0, nombre: 'Mar de Bali'},
-    {lat: -5.0, lon: 118.0, nombre: 'Mar de Flores'},
-    {lat: -2.0, lon: 119.0, nombre: 'Célebes Sur'},
-    {lat: 1.0, lon: 119.0, nombre: 'Ecuador'},
-    {lat: 3.5, lon: 118.0, nombre: 'Mar Sur China Sureste'},
-    {lat: 5.5, lon: 116.0, nombre: 'Mar Sur China Este'},
-    {lat: 7.0, lon: 114.0, nombre: 'Mar Sur China Centro-Este'},
-    {lat: 8.5, lon: 112.0, nombre: 'Mar Sur China Centro'},
-    {lat: 9.5, lon: 110.0, nombre: 'Mar Sur China Oeste'},
-    {lat: 10.2, lon: 108.5, nombre: 'Costa Vietnam Este'},
+    // === SUBIDA HACIA VIETNAM - DIRECTO POR MAR DEL SUR DE CHINA ===
+    // ⚠️ CLAVE: Después de Bali, ir NOROESTE hacia Vietnam, NO al este sobre Borneo
+    {lat: -8.0, lon: 115.0, nombre: 'Norte de Bali'},
+    {lat: -5.0, lon: 114.0, nombre: 'Mar de Java Este'}, // ⬅️ Gira al noroeste
+    {lat: -2.0, lon: 112.5, nombre: 'Mar de Makassar'}, // ⬅️ Entre Borneo y Célebes
+    {lat: 1.0, lon: 111.0, nombre: 'Ecuador - Mar Sur China'}, // ⬅️ Océano abierto
+    {lat: 3.5, lon: 110.0, nombre: 'Mar Sur China Sur'},
+    {lat: 6.0, lon: 109.0, nombre: 'Mar Sur China Centro'},
+    {lat: 8.0, lon: 108.0, nombre: 'Mar Sur China Norte'},
+    {lat: 9.5, lon: 107.5, nombre: 'Costa Vietnam Este'},
     {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
 ],
 
-    
     'DEFAULT': [
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah'},
         {lat: 25.0, lon: -77.0, nombre: 'Florida'},
@@ -448,6 +443,7 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
 
