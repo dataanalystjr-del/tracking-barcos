@@ -67,27 +67,25 @@ const RUTAS_MARITIMAS = {
         {lat: 4.0, lon: 88.0, nombre: 'Golfo Bengala Sureste'},
         {lat: 5.0, lon: 90.0, nombre: 'Golfo Bengala Este'},
         
-        // === CRÍTICO: MAR DE ANDAMÁN - OESTE DE SUMATRA ===
+        // === MAR DE ANDAMÁN - OESTE DE SUMATRA ===
         {lat: 6.0, lon: 91.5, nombre: 'Entrada Andamán'},
         {lat: 6.5, lon: 92.5, nombre: 'Andamán Sur'},
-        {lat: 7.0, lon: 93.0, nombre: 'Andamán Suroeste'},
-        {lat: 7.5, lon: 93.5, nombre: 'Andamán Oeste Sumatra'},
-        {lat: 8.0, lon: 93.5, nombre: 'Andamán Centro-Oeste'},
-        {lat: 8.5, lon: 93.5, nombre: 'Andamán Centro'},
+        {lat: 7.0, lon: 93.5, nombre: 'Andamán Centro-Sur'},
+        {lat: 7.5, lon: 94.0, nombre: 'Andamán Centro (Oeste Sumatra)'},
+        {lat: 8.0, lon: 94.5, nombre: 'Andamán Norte-Centro'},
         
-        // === GIRO AL ESTE - SIN SUBIR AL NORTE ===
-        // ⚠️ CLAVE: Girar al este en lat 8-9° (NO subir a 14-15°)
-        {lat: 9.0, lon: 94.0, nombre: 'Centro Andamán'},
-        {lat: 9.0, lon: 95.5, nombre: 'Este Andamán'}, // ⬅️ Giro al este en lat baja
-        {lat: 8.5, lon: 97.0, nombre: 'Oeste Islas Andamán'}, // ⬅️ Mar abierto
-        {lat: 8.5, lon: 98.5, nombre: 'Entre Andamán y Tailandia'}, // ⬅️ Océano
-        {lat: 9.0, lon: 100.0, nombre: 'Entrada Golfo Tailandia'}, // ⬅️ Por mar
+        // === DIRECTO HACIA SURESTE - ENTRADA GOLFO TAILANDIA ===
+        // ⚠️ CLAVE: Ir directo al sureste, NO subir al norte
+        {lat: 8.0, lon: 96.0, nombre: 'Este Andamán'}, // ⬅️ Mantener lat 8°
+        {lat: 7.5, lon: 98.0, nombre: 'Acercamiento Golfo'}, // ⬅️ Bajar lat a 7.5°
+        {lat: 7.5, lon: 100.0, nombre: 'Entrada Golfo Tailandia'}, // ⬅️ Entrada por sur
         
         // === GOLFO DE TAILANDIA Y VIETNAM ===
-        {lat: 9.5, lon: 101.5, nombre: 'Golfo Tailandia Oeste'},
-        {lat: 10.0, lon: 103.0, nombre: 'Golfo Tailandia Centro'},
-        {lat: 10.3, lon: 104.5, nombre: 'Golfo Tailandia Este'},
-        {lat: 10.5, lon: 105.8, nombre: 'Acercamiento Vietnam'},
+        {lat: 8.0, lon: 101.5, nombre: 'Golfo Tailandia Oeste'},
+        {lat: 8.5, lon: 103.0, nombre: 'Golfo Tailandia Centro'},
+        {lat: 9.0, lon: 104.5, nombre: 'Golfo Tailandia Este'},
+        {lat: 9.5, lon: 105.5, nombre: 'Acercamiento Vietnam'},
+        {lat: 10.2, lon: 106.3, nombre: 'Costa Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     
@@ -196,10 +194,10 @@ const RUTAS_MARITIMAS = {
         {lat: 0.0, lon: 52.0, nombre: 'Índico'},
         {lat: 4.0, lon: 80.0, nombre: 'Sri Lanka'},
         {lat: 6.0, lon: 90.0, nombre: 'Bengala'},
-        {lat: 8.0, lon: 93.5, nombre: 'Andamán'},
-        {lat: 9.0, lon: 97.0, nombre: 'Este Andamán'},
-        {lat: 9.5, lon: 100.0, nombre: 'Golfo Tailandia'},
-        {lat: 10.0, lon: 103.0, nombre: 'Centro Golfo'},
+        {lat: 7.5, lon: 94.0, nombre: 'Andamán'},
+        {lat: 7.5, lon: 98.0, nombre: 'Este Andamán'},
+        {lat: 8.0, lon: 101.0, nombre: 'Golfo Tailandia'},
+        {lat: 9.0, lon: 104.0, nombre: 'Centro Golfo'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau'}
     ]
 };
@@ -434,6 +432,7 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
 
