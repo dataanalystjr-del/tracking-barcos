@@ -19,11 +19,36 @@
         .operacion-item { padding: 3px 0; border-bottom: 1px solid #eee; }
         .ruta-naviera { font-weight: bold; color: #1E3A5F; margin: 5px 0; }
         
+        /* ANOTACIÓN DE RUTA APROXIMADA */
+        .disclaimer {
+            position: absolute; 
+            bottom: 20px; 
+            left: 10px; 
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 8px 12px; 
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 11px;
+            color: #555;
+            max-width: 250px;
+        }
+        .disclaimer strong {
+            color: #1E3A5F;
+            display: block;
+            margin-bottom: 3px;
+        }
+        
         @media (max-width: 768px) {
             .titulo {
                 left: 10px; right: 10px; max-width: none; padding: 8px 12px;
             }
             .titulo h3 { font-size: 14px; }
+            .disclaimer {
+                font-size: 10px;
+                padding: 6px 10px;
+                max-width: 200px;
+            }
         }
     </style>
 </head>
@@ -31,6 +56,13 @@
     <div class="titulo">
         <h3 style="margin: 0;">🚢 Ship Tracking - Progan Us</h3>
     </div>
+    
+    <!-- ANOTACIÓN DE RUTA APROXIMADA -->
+    <div class="disclaimer">
+        <strong>⚠️ Note:</strong>
+        Routes shown are approximate travel paths. Actual vessel routes may vary based on weather, traffic, and operational conditions.
+    </div>
+    
     <div id="map"></div>
     
     <script>
@@ -169,9 +201,9 @@
                     {lat: -34.0, lon: 26.5},
                     {lat: -33.0, lon: 28.5},
                     {lat: -31.5, lon: 30.5},
-                    {lat: -29.8, lon: 32.0},      // Durban offshore
+                    {lat: -29.8, lon: 32.0},
                     {lat: -27.5, lon: 33.5},
-                    {lat: -25.0, lon: 35.0},      // Richards Bay offshore
+                    {lat: -25.0, lon: 35.0},
                     {lat: -22.0, lon: 36.5},
                     {lat: -18.0, lon: 38.0},
                     {lat: -15.0, lon: 39.5},
@@ -189,7 +221,7 @@
                     
                     // Sri Lanka
                     {lat: 5.5, lon: 77.0},
-                    {lat: 6.0, lon: 80.5}         // Sri Lanka Este
+                    {lat: 6.0, lon: 80.5}
                 ];
             }
             else if (normalizarPuerto(origen) === 'CHARLESTON' && normalizarPuerto(destino) === 'HO_CHI_MIN') {
@@ -235,60 +267,55 @@
             // Sri Lanka → Estrecho Malaca → Singapur → Vietnam (LÍNEA RECTA)
             // ============================================
             
-            // Ligeras variaciones pero todas lógicas y directas
             if (naviera.toUpperCase() === 'HAPAG') {
-                // Ruta ligeramente norte (pero directa)
                 rutaBase = rutaBase.concat([
-                    {lat: 6.5, lon: 85.0},        // Andamán
-                    {lat: 6.5, lon: 90.0},        // Andamán Este
-                    {lat: 6.0, lon: 95.0},        // Acercamiento Malaca
-                    {lat: 5.0, lon: 98.5},        // Entrada Malaca Norte
-                    {lat: 3.5, lon: 101.5},       // Malaca Norte
-                    {lat: 2.0, lon: 103.5},       // Acercamiento Singapur
-                    {lat: 1.3, lon: 103.8},       // Singapur Strait
-                    {lat: 3.0, lon: 105.0},       // Mar China Sur
-                    {lat: 5.5, lon: 105.8},       // Directo hacia Vietnam
-                    {lat: 8.0, lon: 106.3},       // Costa Vietnam
-                    {lat: 10.0, lon: 106.7},      // Llegada
+                    {lat: 6.5, lon: 85.0},
+                    {lat: 6.5, lon: 90.0},
+                    {lat: 6.0, lon: 95.0},
+                    {lat: 5.0, lon: 98.5},
+                    {lat: 3.5, lon: 101.5},
+                    {lat: 2.0, lon: 103.5},
+                    {lat: 1.3, lon: 103.8},
+                    {lat: 3.0, lon: 105.0},
+                    {lat: 5.5, lon: 105.8},
+                    {lat: 8.0, lon: 106.3},
+                    {lat: 10.0, lon: 106.7},
                     puertoDestino
                 ]);
             }
             else if (naviera.toUpperCase() === 'ONE') {
-                // Ruta centro (directa)
                 rutaBase = rutaBase.concat([
-                    {lat: 6.0, lon: 85.0},        // Andamán
-                    {lat: 5.5, lon: 90.0},        // Andamán Este
-                    {lat: 5.0, lon: 95.0},        // Acercamiento Malaca
-                    {lat: 4.0, lon: 98.5},        // Entrada Malaca Centro
-                    {lat: 3.0, lon: 101.0},       // Malaca Centro
-                    {lat: 1.8, lon: 103.0},       // Acercamiento Singapur
-                    {lat: 1.3, lon: 103.8},       // Singapur Strait
-                    {lat: 2.5, lon: 105.3},       // Mar China Sur
-                    {lat: 5.0, lon: 106.0},       // Directo Vietnam
-                    {lat: 7.5, lon: 106.5},       // Costa Vietnam
-                    {lat: 10.0, lon: 106.7},      // Llegada
+                    {lat: 6.0, lon: 85.0},
+                    {lat: 5.5, lon: 90.0},
+                    {lat: 5.0, lon: 95.0},
+                    {lat: 4.0, lon: 98.5},
+                    {lat: 3.0, lon: 101.0},
+                    {lat: 1.8, lon: 103.0},
+                    {lat: 1.3, lon: 103.8},
+                    {lat: 2.5, lon: 105.3},
+                    {lat: 5.0, lon: 106.0},
+                    {lat: 7.5, lon: 106.5},
+                    {lat: 10.0, lon: 106.7},
                     puertoDestino
                 ]);
             }
             else if (naviera.toUpperCase() === 'ZIN') {
-                // Ruta ligeramente sur (pero SIN bajar a Java - directa)
                 rutaBase = rutaBase.concat([
-                    {lat: 5.5, lon: 85.0},        // Andamán Sur
-                    {lat: 5.0, lon: 90.0},        // Andamán Este
-                    {lat: 4.0, lon: 95.0},        // Acercamiento Malaca
-                    {lat: 3.0, lon: 98.5},        // Entrada Malaca Sur
-                    {lat: 2.0, lon: 101.0},       // Malaca Sur
-                    {lat: 1.0, lon: 103.0},       // Acercamiento Singapur Sur
-                    {lat: 1.3, lon: 103.8},       // Singapur Strait
-                    {lat: 2.0, lon: 105.8},       // Mar China Sur
-                    {lat: 4.5, lon: 106.5},       // Directo Vietnam
-                    {lat: 7.0, lon: 106.7},       // Costa Vietnam
-                    {lat: 9.5, lon: 106.7},       // Llegada
+                    {lat: 5.5, lon: 85.0},
+                    {lat: 5.0, lon: 90.0},
+                    {lat: 4.0, lon: 95.0},
+                    {lat: 3.0, lon: 98.5},
+                    {lat: 2.0, lon: 101.0},
+                    {lat: 1.0, lon: 103.0},
+                    {lat: 1.3, lon: 103.8},
+                    {lat: 2.0, lon: 105.8},
+                    {lat: 4.5, lon: 106.5},
+                    {lat: 7.0, lon: 106.7},
+                    {lat: 9.5, lon: 106.7},
                     puertoDestino
                 ]);
             }
             else {
-                // DEFAULT - Ruta estándar directa
                 rutaBase = rutaBase.concat([
                     {lat: 6.0, lon: 85.0},
                     {lat: 5.5, lon: 90.0},
