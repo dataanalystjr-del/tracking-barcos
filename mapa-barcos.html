@@ -17,17 +17,13 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .operacion-item { padding: 3px 0; border-bottom: 1px solid #eee; }
+        .ruta-naviera { font-weight: bold; color: #1E3A5F; margin: 5px 0; }
         
         @media (max-width: 768px) {
             .titulo {
-                left: 10px;
-                right: 10px;
-                max-width: none;
-                padding: 8px 12px;
+                left: 10px; right: 10px; max-width: none; padding: 8px 12px;
             }
-            .titulo h3 {
-                font-size: 14px;
-            }
+            .titulo h3 { font-size: 14px; }
         }
     </style>
 </head>
@@ -39,93 +35,139 @@
     
     <script>
         // ============================================
-        // FUNCIÓN PARA AJUSTAR COORDENADAS MARÍTIMAS
+        // DEFINICIÓN DE RUTAS MARÍTIMAS POR NAVIERA
         // ============================================
-        function ajustarCoordenadasMaritimas(lat, lon) {
-            console.log('Coordenadas originales:', lat, lon);
+        const RUTAS_MARITIMAS = {
+            'HAPAG': [
+                // Savannah → Atlántico Sur → Cabo Buena Esperanza → Océano Índico → Vietnam
+                {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+                {lat: 25.0, lon: -75.0, nombre: 'Atlántico Norte'},
+                {lat: 5.0, lon: -35.0, nombre: 'Ecuador Atlántico'},
+                {lat: -15.0, lon: -25.0, nombre: 'Atlántico Sur'},
+                {lat: -34.5, lon: 18.5, nombre: 'Cabo de Buena Esperanza'},
+                {lat: -35.0, lon: 25.0, nombre: 'Océano Índico Oeste'},
+                {lat: -30.0, lon: 40.0, nombre: 'Canal de Mozambique'},
+                {lat: -10.0, lon: 50.0, nombre: 'Océano Índico Central'},
+                {lat: 5.0, lon: 75.0, nombre: 'Océano Índico Norte'},
+                {lat: 8.0, lon: 95.0, nombre: 'Andamán'},
+                {lat: 10.0, lon: 102.0, nombre: 'Golfo de Tailandia'},
+                {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+            ],
+            'ONE': [
+                // Ruta ONE (Ocean Network Express) - Ruta más directa por Canal de Mozambique
+                {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+                {lat: 25.0, lon: -75.0, nombre: 'Atlántico Norte'},
+                {lat: 5.0, lon: -35.0, nombre: 'Ecuador Atlántico'},
+                {lat: -15.0, lon: -25.0, nombre: 'Atlántico Sur'},
+                {lat: -34.5, lon: 18.5, nombre: 'Cabo de Buena Esperanza'},
+                {lat: -32.0, lon: 28.0, nombre: 'Costa Este Sudáfrica'},
+                {lat: -25.0, lon: 35.0, nombre: 'Entrada Canal Mozambique'},
+                {lat: -12.0, lon: 42.0, nombre: 'Canal de Mozambique'},
+                {lat: 0.0, lon: 55.0, nombre: 'Océano Índico'},
+                {lat: 8.0, lon: 80.0, nombre: 'Sri Lanka'},
+                {lat: 8.0, lon: 95.0, nombre: 'Andamán'},
+                {lat: 10.0, lon: 102.0, nombre: 'Golfo de Tailandia'},
+                {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+            ],
+            'ZIN': [
+                // Ruta ZIN - Ruta alternativa más al sur (rodea Madagascar por el sur)
+                {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+                {lat: 25.0, lon: -75.0, nombre: 'Atlántico Norte'},
+                {lat: 5.0, lon: -35.0, nombre: 'Ecuador Atlántico'},
+                {lat: -15.0, lon: -25.0, nombre: 'Atlántico Sur'},
+                {lat: -34.5, lon: 18.5, nombre: 'Cabo de Buena Esperanza'},
+                {lat: -38.0, lon: 30.0, nombre: 'Sur de Sudáfrica'},
+                {lat: -35.0, lon: 50.0, nombre: 'Sur de Madagascar'},
+                {lat: -20.0, lon: 65.0, nombre: 'Océano Índico Este'},
+                {lat: 0.0, lon: 80.0, nombre: 'Océano Índico Norte'},
+                {lat: 8.0, lon: 95.0, nombre: 'Andamán'},
+                {lat: 10.0, lon: 102.0, nombre: 'Golfo de Tailandia'},
+                {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+            ],
+            'DEFAULT': [
+                // Ruta por defecto si no se especifica naviera
+                {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+                {lat: 25.0, lon: -75.0, nombre: 'Atlántico Norte'},
+                {lat: 5.0, lon: -35.0, nombre: 'Ecuador Atlántico'},
+                {lat: -15.0, lon: -25.0, nombre: 'Atlántico Sur'},
+                {lat: -34.5, lon: 18.5, nombre: 'Cabo de Buena Esperanza'},
+                {lat: -35.0, lon: 25.0, nombre: 'Océano Índico Oeste'},
+                {lat: -30.0, lon: 40.0, nombre: 'Canal de Mozambique'},
+                {lat: -10.0, lon: 50.0, nombre: 'Océano Índico Central'},
+                {lat: 5.0, lon: 75.0, nombre: 'Océano Índico Norte'},
+                {lat: 8.0, lon: 95.0, nombre: 'Andamán'},
+                {lat: 10.0, lon: 102.0, nombre: 'Golfo de Tailandia'},
+                {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+            ]
+        };
+        
+        // ============================================
+        // FUNCIÓN PARA CALCULAR POSICIÓN EN RUTA
+        // ============================================
+        function calcularPosicionEnRuta(ruta, porcentaje) {
+            if (porcentaje <= 0) return ruta[0];
+            if (porcentaje >= 100) return ruta[ruta.length - 1];
             
-            // ZONA CRÍTICA: COSTA ESTE DE SUDÁFRICA
-            if (lon >= 25 && lon <= 33 && lat >= -35 && lat <= -25) {
-                console.log('Detectado sobre costa este de Sudáfrica - Ajustando...');
-                return {
-                    lat: lat,
-                    lon: 35
-                };
+            var longitudTotal = 0;
+            var segmentos = [];
+            
+            for (var i = 0; i < ruta.length - 1; i++) {
+                var distancia = Math.sqrt(
+                    Math.pow(ruta[i+1].lat - ruta[i].lat, 2) + 
+                    Math.pow(ruta[i+1].lon - ruta[i].lon, 2)
+                );
+                segmentos.push({
+                    inicio: ruta[i],
+                    fin: ruta[i+1],
+                    distancia: distancia
+                });
+                longitudTotal += distancia;
             }
             
-            // ZONA CRÍTICA: COSTA OESTE DE ÁFRICA
-            if (lon >= -5 && lon < 20 && lat >= -20 && lat <= 10) {
-                console.log('Detectado sobre costa oeste de África - Ajustando...');
-                return {
-                    lat: lat,
-                    lon: -12
-                };
-            }
+            var distanciaObjetivo = (porcentaje / 100) * longitudTotal;
+            var distanciaAcumulada = 0;
             
-            // ZONA CRÍTICA: INTERIOR DE ÁFRICA
-            if (lon >= 10 && lon <= 40 && lat >= -25 && lat <= 20) {
-                console.log('Detectado sobre interior de África - Ajustando...');
-                if (lat < 0) {
+            for (var i = 0; i < segmentos.length; i++) {
+                if (distanciaAcumulada + segmentos[i].distancia >= distanciaObjetivo) {
+                    var proporcion = (distanciaObjetivo - distanciaAcumulada) / segmentos[i].distancia;
                     return {
-                        lat: lat,
-                        lon: 42
+                        lat: segmentos[i].inicio.lat + (segmentos[i].fin.lat - segmentos[i].inicio.lat) * proporcion,
+                        lon: segmentos[i].inicio.lon + (segmentos[i].fin.lon - segmentos[i].inicio.lon) * proporcion
                     };
                 }
+                distanciaAcumulada += segmentos[i].distancia;
+            }
+            
+            return ruta[ruta.length - 1];
+        }
+        
+        // ============================================
+        // FUNCIÓN PARA CALCULAR PROGRESO DEL BARCO
+        // ============================================
+        function calcularProgresoBarco(etdString) {
+            try {
+                var partes = etdString.split('/');
+                var dia = parseInt(partes[0]);
+                var mes = parseInt(partes[1]) - 1;
+                var año = parseInt('20' + partes[2]);
+                
+                var etd = new Date(año, mes, dia);
+                var ahora = new Date();
+                
+                var diasTranscurridos = Math.floor((ahora - etd) / (1000 * 60 * 60 * 24));
+                var diasTotalesViaje = 45; // Savannah → Vietnam aprox 45 días
+                
+                var progreso = Math.min(100, Math.max(0, (diasTranscurridos / diasTotalesViaje) * 100));
+                
                 return {
-                    lat: lat,
-                    lon: -12
+                    progreso: progreso,
+                    diasTranscurridos: diasTranscurridos,
+                    diasTotales: diasTotalesViaje
                 };
+            } catch (e) {
+                console.error('Error calculando progreso:', e);
+                return {progreso: 50, diasTranscurridos: 0, diasTotales: 45};
             }
-            
-            // CABO DE BUENA ESPERANZA
-            if (lon >= 15 && lon < 25 && lat >= -36 && lat < -28) {
-                console.log('Zona del Cabo - OK o ajustando...');
-                if (lon >= 18 && lon <= 20 && lat >= -35 && lat <= -33) {
-                    return {lat: lat, lon: lon};
-                }
-                return {
-                    lat: -34.5,
-                    lon: 18.5
-                };
-            }
-            
-            // COSTA ESTE DE USA (Savannah)
-            if (lon < -60 && lat > 25 && lat < 35) {
-                return {
-                    lat: lat,
-                    lon: Math.max(lon, -81)
-                };
-            }
-            
-            // ATLÁNTICO SUR (Ruta abierta)
-            if (lon >= -50 && lon < -5 && lat >= -35 && lat < 5) {
-                console.log('Atlántico Sur - Océano abierto OK');
-                return {lat: lat, lon: lon};
-            }
-            
-            // OCÉANO ÍNDICO (Ruta abierta)
-            if (lon >= 35 && lon < 95 && lat >= -40 && lat < 10) {
-                console.log('Océano Índico - Océano abierto OK');
-                return {lat: lat, lon: lon};
-            }
-            
-            // SUDESTE ASIÁTICO
-            if (lon >= 95 && lon < 105 && lat >= -5 && lat < 8) {
-                console.log('Detectado sobre Sudeste Asiático - Ajustando...');
-                return {
-                    lat: lat,
-                    lon: 93
-                };
-            }
-            
-            // COSTA DE VIETNAM (Destino)
-            if (lon >= 105 && lon <= 108 && lat >= 8 && lat <= 12) {
-                console.log('Costa de Vietnam - Destino OK');
-                return {lat: lat, lon: lon};
-            }
-            
-            console.log('Zona no identificada - Mantener coordenadas');
-            return {lat: lat, lon: lon};
         }
         
         // ============================================
@@ -150,24 +192,17 @@
             .addTo(map);
         
         // ============================================
-        // ÍCONO DE BARCO DE CONTENEDORES (Opción 1)
+        // ÍCONO DE BARCO
         // ============================================
         var shipIcon = L.divIcon({
             html: `<svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(10,40)">
-                    <!-- Casco -->
                     <path d="M 0,10 L 60,10 L 70,20 L 0,20 Z" fill="#1E3A5F" stroke="#000" stroke-width="1.5"/>
-                    
-                    <!-- Contenedores apilados (fila inferior) -->
                     <rect x="10" y="0" width="12" height="10" fill="#DC143C" stroke="#000" stroke-width="1"/>
                     <rect x="23" y="0" width="12" height="10" fill="#4169E1" stroke="#000" stroke-width="1"/>
                     <rect x="36" y="0" width="12" height="10" fill="#FFD700" stroke="#000" stroke-width="1"/>
-                    
-                    <!-- Contenedores apilados (fila superior) -->
                     <rect x="16" y="-8" width="10" height="8" fill="#228B22" stroke="#000" stroke-width="1"/>
                     <rect x="30" y="-8" width="10" height="8" fill="#FF6347" stroke="#000" stroke-width="1"/>
-                    
-                    <!-- Cabina pequeña -->
                     <rect x="48" y="-5" width="12" height="15" fill="#4682B4" stroke="#000" stroke-width="1"/>
                     <rect x="50" y="-2" width="3" height="3" fill="#87CEEB" stroke="#000" stroke-width="0.5"/>
                     <rect x="55" y="-2" width="3" height="3" fill="#87CEEB" stroke="#000" stroke-width="0.5"/>
@@ -193,34 +228,20 @@
             operations.forEach(function(op) {
                 var parts = op.split('|');
                 
-                if (parts.length !== 5) {
+                if (parts.length !== 4) {
                     console.warn('Formato inválido:', op);
                     return;
                 }
                 
                 var operation = parts[0].replace(/_/g, ' ');
                 var etd = parts[1];
-                var lat = parseFloat(parts[2]);
-                var lon = parseFloat(parts[3]);
-                var containers = parts[4];
-                
-                if (isNaN(lat) || isNaN(lon)) {
-                    console.warn('Coordenadas inválidas:', lat, lon);
-                    return;
-                }
-                
-                // ✨ AJUSTAR COORDENADAS PARA EVITAR TIERRA
-                var coordAjustadas = ajustarCoordenadasMaritimas(lat, lon);
-                lat = coordAjustadas.lat;
-                lon = coordAjustadas.lon;
-                
-                console.log('Coordenadas ajustadas:', lat, lon);
+                var naviera = parts[2] || 'DEFAULT';
+                var containers = parts[3];
                 
                 if (!barcosPorETD[etd]) {
                     barcosPorETD[etd] = {
                         etd: etd,
-                        lat: lat,
-                        lon: lon,
+                        naviera: naviera,
                         operaciones: [],
                         totalContainers: 0
                     };
@@ -234,27 +255,58 @@
             });
             
             // ============================================
-            // CREAR MARCADORES DE BARCOS
+            // CREAR MARCADORES Y RUTAS DE BARCOS
             // ============================================
             Object.values(barcosPorETD).forEach(function(barco) {
+                // Seleccionar ruta según naviera
+                var rutaNaviera = RUTAS_MARITIMAS[barco.naviera.toUpperCase()] || RUTAS_MARITIMAS['DEFAULT'];
+                
+                // Calcular posición actual según progreso
+                var progresoInfo = calcularProgresoBarco(barco.etd);
+                var posicionActual = calcularPosicionEnRuta(rutaNaviera, progresoInfo.progreso);
+                
+                // Dibujar la ruta completa
+                var coordenadasRuta = rutaNaviera.map(function(punto) {
+                    return [punto.lat, punto.lon];
+                });
+                
+                var colorRuta = {
+                    'HAPAG': '#FF6600',      // Naranja Hapag-Lloyd
+                    'ONE': '#DC0032',        // Magenta ONE
+                    'ZIN': '#0066CC',        // Azul ZIN
+                    'DEFAULT': '#666666'
+                };
+                
+                L.polyline(coordenadasRuta, {
+                    color: colorRuta[barco.naviera.toUpperCase()] || colorRuta['DEFAULT'],
+                    weight: 3,
+                    opacity: 0.7,
+                    dashArray: '10, 10'
+                }).addTo(map);
+                
+                // Crear lista de operaciones
                 var operacionesList = barco.operaciones.map(function(op) {
                     return '<div class="operacion-item">📦 ' + op.nombre + ' (' + op.containers + ' cont.)</div>';
                 }).join('');
                 
-                var marker = L.marker([barco.lat, barco.lon], {icon: shipIcon})
+                // Crear marcador del barco
+                var marker = L.marker([posicionActual.lat, posicionActual.lon], {icon: shipIcon})
                     .bindPopup(
                         '<b>🚢 Ship - Exit: ' + barco.etd + '</b><br>' +
+                        '<div class="ruta-naviera">🛳️ Carrier: ' + barco.naviera + '</div>' +
                         '<b>Total Containers: ' + barco.totalContainers + '</b><br>' +
+                        '<b>📍 Progress: ' + progresoInfo.progreso.toFixed(1) + '%</b><br>' +
+                        '<small>(' + progresoInfo.diasTranscurridos + ' days / ' + progresoInfo.diasTotales + ' days estimated)</small>' +
                         '<hr style="margin: 8px 0;">' +
                         '<b>Onboard Operations (' + barco.operaciones.length + '):</b><br>' +
                         operacionesList +
                         '<hr style="margin: 8px 0;">' +
-                        '📍 Position: ' + barco.lat.toFixed(2) + ', ' + barco.lon.toFixed(2),
-                        {maxWidth: 300}
+                        '📍 Current Position: ' + posicionActual.lat.toFixed(2) + ', ' + posicionActual.lon.toFixed(2),
+                        {maxWidth: 350}
                     )
                     .addTo(map);
                 
-                bounds.push([barco.lat, barco.lon]);
+                bounds.push([posicionActual.lat, posicionActual.lon]);
             });
             
             // ============================================
