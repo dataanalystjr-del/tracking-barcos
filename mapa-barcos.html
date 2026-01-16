@@ -140,47 +140,61 @@ const RUTAS_MARITIMAS = {
     ],
     
     'ZIN': [
-        // === AMÉRICA ===
-        {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
-        {lat: 25.0, lon: -75.0, nombre: 'Florida'},
-        {lat: 15.0, lon: -56.0, nombre: 'Caribe'},
-        {lat: 5.0, lon: -40.0, nombre: 'Atlántico Ecuador'},
-        {lat: -5.0, lon: -30.0, nombre: 'Brasil Norte'},
-        {lat: -15.0, lon: -24.0, nombre: 'Brasil Sur'},
-        {lat: -25.0, lon: -16.0, nombre: 'Atlántico Sur'},
-        {lat: -32.0, lon: 0.0, nombre: 'Acercamiento África'},
-        
-        // === ÁFRICA Y SUR DE MADAGASCAR ===
-        {lat: -35.0, lon: 17.0, nombre: 'Oeste Cabo'},
-        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
-        {lat: -36.0, lon: 24.0, nombre: 'Este Cabo'},
-        {lat: -37.0, lon: 32.0, nombre: 'Muy Sur Sudáfrica'},
-        {lat: -37.5, lon: 40.0, nombre: 'Índico Muy Sur'},
-        {lat: -36.0, lon: 48.0, nombre: 'Sur Madagascar Oeste'},
-        {lat: -32.0, lon: 56.0, nombre: 'Sur Madagascar Este'},
-        {lat: -26.0, lon: 64.0, nombre: 'Índico Sur Este'},
-        {lat: -18.0, lon: 70.0, nombre: 'Índico Centro-Sur'},
-        {lat: -10.0, lon: 76.0, nombre: 'Índico Este'},
-        {lat: -5.0, lon: 81.0, nombre: 'Sur Sri Lanka'},
-        {lat: -5.0, lon: 86.0, nombre: 'Índico Sureste'},
-        {lat: -5.5, lon: 90.0, nombre: 'Camino Sur Sumatra'},
-        
-        // === SUR DE SUMATRA ===
-        {lat: -6.0, lon: 94.0, nombre: 'Sur Sumatra Oeste'},
-        {lat: -6.5, lon: 98.0, nombre: 'Sur Sumatra Centro'},
-        {lat: -7.0, lon: 102.0, nombre: 'Sur Sumatra Este'},
-        {lat: -7.0, lon: 105.0, nombre: 'Estrecho Sunda Oeste'},
-        {lat: -6.5, lon: 106.5, nombre: 'Estrecho Sunda'},
-        {lat: -5.5, lon: 108.0, nombre: 'Mar Java Este'},
-        {lat: -4.0, lon: 109.5, nombre: 'Mar Java Noreste'},
-        {lat: -2.0, lon: 110.5, nombre: 'Salida Java'},
-        {lat: 0.0, lon: 111.0, nombre: 'Ecuador'},
-        {lat: 2.5, lon: 111.0, nombre: 'Mar Sur China Este'},
-        {lat: 5.0, lon: 110.0, nombre: 'Mar Sur China Centro'},
-        {lat: 7.5, lon: 109.0, nombre: 'Mar Sur China Norte'},
-        {lat: 9.5, lon: 108.0, nombre: 'Costa Vietnam'},
-        {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
-    ],
+    // === AMÉRICA ===
+    {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+    {lat: 25.0, lon: -75.0, nombre: 'Florida'},
+    {lat: 15.0, lon: -56.0, nombre: 'Caribe'},
+    {lat: 5.0, lon: -40.0, nombre: 'Atlántico Ecuador'},
+    {lat: -5.0, lon: -30.0, nombre: 'Brasil Norte'},
+    {lat: -15.0, lon: -24.0, nombre: 'Brasil Sur'},
+    {lat: -25.0, lon: -16.0, nombre: 'Atlántico Sur'},
+    {lat: -32.0, lon: 0.0, nombre: 'Acercamiento África'},
+    
+    // === ÁFRICA Y SUR DE MADAGASCAR ===
+    {lat: -35.0, lon: 17.0, nombre: 'Oeste Cabo'},
+    {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+    {lat: -36.0, lon: 24.0, nombre: 'Este Cabo'},
+    {lat: -37.0, lon: 32.0, nombre: 'Muy Sur Sudáfrica'},
+    {lat: -37.5, lon: 40.0, nombre: 'Índico Muy Sur'},
+    {lat: -36.0, lon: 48.0, nombre: 'Sur Madagascar Oeste'},
+    {lat: -32.0, lon: 56.0, nombre: 'Sur Madagascar Este'},
+    {lat: -26.0, lon: 64.0, nombre: 'Índico Sur Este'},
+    {lat: -18.0, lon: 70.0, nombre: 'Índico Centro-Sur'},
+    {lat: -10.0, lon: 76.0, nombre: 'Índico Este'},
+    {lat: -5.0, lon: 81.0, nombre: 'Sur Sri Lanka'},
+    {lat: -5.0, lon: 86.0, nombre: 'Índico Sureste'},
+    {lat: -5.5, lon: 90.0, nombre: 'Camino Sur Sumatra'},
+    
+    // === SUR DE SUMATRA ===
+    {lat: -6.0, lon: 94.0, nombre: 'Sur Sumatra Oeste'},
+    {lat: -6.5, lon: 98.0, nombre: 'Sur Sumatra Centro'},
+    {lat: -7.0, lon: 102.0, nombre: 'Sur Sumatra Este'},
+    {lat: -7.5, lon: 105.0, nombre: 'Oeste Estrecho Sunda'},
+    
+    // === ESTRECHO DE SUNDA (Entre Sumatra y Java) ===
+    {lat: -8.0, lon: 106.0, nombre: 'Estrecho de Sunda'}, // ⬅️ Entre islas
+    
+    // === SUR DE JAVA - MANTENER AL SUR ===
+    // ⚠️ CLAVE: Pasar al SUR de Java (lat -8° a -9°), NO sobre la isla
+    {lat: -8.5, lon: 108.0, nombre: 'Sur de Java Oeste'}, // ⬅️ Sur de la isla
+    {lat: -9.0, lon: 110.0, nombre: 'Sur de Java Centro'}, // ⬅️ Océano Índico Sur
+    {lat: -9.0, lon: 112.0, nombre: 'Sur de Java Este'}, // ⬅️ Sigue al sur
+    {lat: -8.5, lon: 114.0, nombre: 'Este de Java'}, // ⬅️ Pasó la isla
+    
+    // === SUBIDA AL NORTE - MAR DE BALI Y MAR DEL SUR DE CHINA ===
+    {lat: -7.0, lon: 116.0, nombre: 'Mar de Bali'},
+    {lat: -5.0, lon: 118.0, nombre: 'Mar de Flores'},
+    {lat: -2.0, lon: 119.0, nombre: 'Célebes Sur'},
+    {lat: 1.0, lon: 119.0, nombre: 'Ecuador'},
+    {lat: 3.5, lon: 118.0, nombre: 'Mar Sur China Sureste'},
+    {lat: 5.5, lon: 116.0, nombre: 'Mar Sur China Este'},
+    {lat: 7.0, lon: 114.0, nombre: 'Mar Sur China Centro-Este'},
+    {lat: 8.5, lon: 112.0, nombre: 'Mar Sur China Centro'},
+    {lat: 9.5, lon: 110.0, nombre: 'Mar Sur China Oeste'},
+    {lat: 10.2, lon: 108.5, nombre: 'Costa Vietnam Este'},
+    {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+],
+
     
     'DEFAULT': [
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah'},
@@ -434,6 +448,7 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
 
