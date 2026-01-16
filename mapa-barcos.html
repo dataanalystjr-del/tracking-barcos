@@ -56,12 +56,12 @@ const RUTAS_MARITIMAS = {
         {lat: 2.0, lon: 60.0, nombre: 'Océano Índico Central'},
         {lat: 6.0, lon: 72.0, nombre: 'Sur de India'},
         {lat: 4.0, lon: 80.0, nombre: 'Sur de Sri Lanka'},
-        {lat: 3.0, lon: 88.0, nombre: 'Océano Índico Este'},
-        {lat: 3.0, lon: 95.0, nombre: 'Norte de Sumatra'},
-        {lat: 5.0, lon: 100.0, nombre: 'Mar de Andamán'},
-        {lat: 7.0, lon: 103.0, nombre: 'Entrada Golfo Tailandia'},
-        {lat: 9.0, lon: 105.0, nombre: 'Golfo de Tailandia'},
-        {lat: 10.0, lon: 106.2, nombre: 'Costa Vietnam'},
+        {lat: 2.0, lon: 88.0, nombre: 'Océano Índico Este'},
+        {lat: 1.0, lon: 93.0, nombre: 'OESTE de Sumatra'}, // ⬅️ CLAVE: Oeste de Sumatra
+        {lat: 3.5, lon: 96.0, nombre: 'Mar de Andamán'}, // ⬅️ Más al oeste
+        {lat: 6.0, lon: 99.5, nombre: 'Norte de Sumatra'}, // ⬅️ Bordeando costa oeste
+        {lat: 8.0, lon: 102.5, nombre: 'Golfo de Tailandia'},
+        {lat: 9.5, lon: 104.5, nombre: 'Costa Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     'ONE': [
@@ -87,12 +87,12 @@ const RUTAS_MARITIMAS = {
         {lat: 5.0, lon: 82.0, nombre: 'Sur de Sri Lanka'},
         {lat: 4.0, lon: 90.0, nombre: 'Golfo de Bengala'},
         {lat: 5.0, lon: 97.0, nombre: 'Norte de Sumatra'},
-        {lat: 3.5, lon: 100.5, nombre: 'Entrada Estrecho Malaca'},
-        {lat: 2.0, lon: 102.0, nombre: 'Estrecho de Malaca Sur'},
+        {lat: 3.5, lon: 100.0, nombre: 'Entrada Estrecho Malaca'},
+        {lat: 2.0, lon: 102.0, nombre: 'Estrecho de Malaca Centro'},
         {lat: 1.3, lon: 103.8, nombre: 'Singapur'},
-        {lat: 3.0, lon: 105.0, nombre: 'Salida Malaca'},
-        {lat: 6.0, lon: 106.0, nombre: 'Mar del Sur de China'},
-        {lat: 9.0, lon: 106.5, nombre: 'Costa Vietnam'},
+        {lat: 2.5, lon: 105.5, nombre: 'Salida Estrecho Malaca'},
+        {lat: 5.0, lon: 106.5, nombre: 'Mar del Sur de China'},
+        {lat: 8.0, lon: 107.0, nombre: 'Acercamiento Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     'ZIN': [
@@ -116,12 +116,13 @@ const RUTAS_MARITIMAS = {
         {lat: -10.0, lon: 75.0, nombre: 'Océano Índico Central'},
         {lat: -5.0, lon: 82.0, nombre: 'Sur de Sri Lanka'},
         {lat: -4.0, lon: 90.0, nombre: 'Océano Índico Sureste'},
-        {lat: -6.0, lon: 100.0, nombre: 'Sur de Sumatra'},
-        {lat: -7.0, lon: 106.0, nombre: 'Estrecho de Sunda'},
-        {lat: -5.0, lon: 108.0, nombre: 'Mar de Java'},
-        {lat: 0.0, lon: 110.0, nombre: 'Mar del Sur de China Sur'},
-        {lat: 5.0, lon: 109.0, nombre: 'Mar del Sur de China'},
-        {lat: 8.0, lon: 107.5, nombre: 'Costa Vietnam Sur'},
+        {lat: -6.0, lon: 98.0, nombre: 'SUR de Sumatra'},
+        {lat: -6.5, lon: 105.5, nombre: 'Estrecho de Sunda'},
+        {lat: -6.0, lon: 108.0, nombre: 'Mar de Java'},
+        {lat: -2.0, lon: 110.0, nombre: 'Norte Mar de Java'},
+        {lat: 2.0, lon: 110.0, nombre: 'Mar del Sur de China Sur'},
+        {lat: 6.0, lon: 109.0, nombre: 'Mar del Sur de China'},
+        {lat: 9.0, lon: 107.5, nombre: 'Costa Vietnam Sur'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
     'DEFAULT': [
@@ -144,14 +145,16 @@ const RUTAS_MARITIMAS = {
         {lat: 0.0, lon: 55.0, nombre: 'Océano Índico'},
         {lat: 6.0, lon: 70.0, nombre: 'Centro Índico'},
         {lat: 4.0, lon: 80.0, nombre: 'Sur de Sri Lanka'},
-        {lat: 3.0, lon: 90.0, nombre: 'Golfo de Bengala'},
-        {lat: 3.5, lon: 97.0, nombre: 'Norte de Sumatra'},
-        {lat: 5.0, lon: 100.0, nombre: 'Mar de Andamán'},
-        {lat: 6.5, lon: 103.0, nombre: 'Golfo de Tailandia'},
-        {lat: 9.0, lon: 105.5, nombre: 'Costa Vietnam'},
+        {lat: 2.0, lon: 88.0, nombre: 'Golfo de Bengala'},
+        {lat: 1.5, lon: 94.0, nombre: 'Oeste de Sumatra'},
+        {lat: 4.0, lon: 97.0, nombre: 'Mar de Andamán'},
+        {lat: 6.5, lon: 100.0, nombre: 'Norte de Sumatra'},
+        {lat: 8.0, lon: 103.0, nombre: 'Golfo de Tailandia'},
+        {lat: 9.5, lon: 105.0, nombre: 'Costa Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ]
 };
+
 
 
         
@@ -385,5 +388,6 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
