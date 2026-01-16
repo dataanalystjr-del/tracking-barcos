@@ -34,7 +34,8 @@
     <div id="map"></div>
     
     <script>
-'HAPAG': [
+const RUTAS_MARITIMAS = {
+    'HAPAG': [
     // === AMÉRICA ===
     {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
     {lat: 25.0, lon: -77.0, nombre: 'Florida'},
@@ -88,6 +89,120 @@
     {lat: 10.5, lon: 106.0, nombre: 'Acercamiento Vietnam'},
     {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
 ],
+    
+    'ONE': [
+        // === AMÉRICA ===
+        {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+        {lat: 25.0, lon: -76.0, nombre: 'Florida'},
+        {lat: 15.0, lon: -58.0, nombre: 'Caribe'},
+        {lat: 5.0, lon: -42.0, nombre: 'Atlántico Ecuador'},
+        {lat: -5.0, lon: -32.0, nombre: 'Brasil Norte'},
+        {lat: -15.0, lon: -26.0, nombre: 'Brasil Sur'},
+        {lat: -25.0, lon: -18.0, nombre: 'Atlántico Sur'},
+        {lat: -32.0, lon: -3.0, nombre: 'Acercamiento África'},
+        
+        // === ÁFRICA ===
+        {lat: -35.0, lon: 16.0, nombre: 'Oeste Cabo'},
+        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+        {lat: -34.0, lon: 25.0, nombre: 'Este Cabo'},
+        {lat: -28.0, lon: 32.0, nombre: 'Durban'},
+        {lat: -22.0, lon: 36.0, nombre: 'Mozambique Sur'},
+        {lat: -16.0, lon: 40.0, nombre: 'Mozambique Centro'},
+        {lat: -10.0, lon: 44.0, nombre: 'Canal Mozambique'},
+        {lat: -4.0, lon: 47.0, nombre: 'Norte Madagascar'},
+        
+        // === OCÉANO ÍNDICO ===
+        {lat: 0.0, lon: 52.0, nombre: 'Índico Oeste'},
+        {lat: 3.0, lon: 62.0, nombre: 'Índico Centro'},
+        {lat: 5.0, lon: 72.0, nombre: 'Índico Este-Centro'},
+        {lat: 6.0, lon: 79.0, nombre: 'Oeste Sri Lanka'},
+        {lat: 4.0, lon: 83.0, nombre: 'Sur Sri Lanka'},
+        {lat: 5.0, lon: 87.0, nombre: 'Golfo Bengala Sur'},
+        {lat: 6.0, lon: 90.0, nombre: 'Golfo Bengala Este'},
+        {lat: 6.5, lon: 92.5, nombre: 'Antes Sumatra'},
+        {lat: 7.0, lon: 94.5, nombre: 'Oeste Sumatra Norte'},
+        
+        // === ESTRECHO DE MALACA (Entre Sumatra y Península Malaya) ===
+        {lat: 6.5, lon: 96.5, nombre: 'Entrada Malaca Norte'},
+        {lat: 6.0, lon: 98.0, nombre: 'Malaca Norte'},
+        {lat: 5.0, lon: 99.5, nombre: 'Malaca Centro-Norte'},
+        {lat: 4.0, lon: 100.5, nombre: 'Malaca Centro'},
+        {lat: 3.0, lon: 101.5, nombre: 'Malaca Centro-Sur'},
+        {lat: 2.0, lon: 102.5, nombre: 'Malaca Sur'},
+        {lat: 1.3, lon: 103.8, nombre: 'Singapur'},
+        
+        // === MAR DEL SUR DE CHINA ===
+        {lat: 2.0, lon: 105.0, nombre: 'Salida Malaca'},
+        {lat: 4.0, lon: 106.0, nombre: 'Mar Sur China Sur'},
+        {lat: 6.5, lon: 106.5, nombre: 'Mar Sur China Centro'},
+        {lat: 9.0, lon: 106.8, nombre: 'Costa Vietnam'},
+        {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+    ],
+    
+    'ZIN': [
+        // === AMÉRICA ===
+        {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
+        {lat: 25.0, lon: -75.0, nombre: 'Florida'},
+        {lat: 15.0, lon: -56.0, nombre: 'Caribe'},
+        {lat: 5.0, lon: -40.0, nombre: 'Atlántico Ecuador'},
+        {lat: -5.0, lon: -30.0, nombre: 'Brasil Norte'},
+        {lat: -15.0, lon: -24.0, nombre: 'Brasil Sur'},
+        {lat: -25.0, lon: -16.0, nombre: 'Atlántico Sur'},
+        {lat: -32.0, lon: 0.0, nombre: 'Acercamiento África'},
+        
+        // === ÁFRICA Y SUR DE MADAGASCAR ===
+        {lat: -35.0, lon: 17.0, nombre: 'Oeste Cabo'},
+        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+        {lat: -36.0, lon: 24.0, nombre: 'Este Cabo'},
+        {lat: -37.0, lon: 32.0, nombre: 'Muy Sur Sudáfrica'},
+        {lat: -37.5, lon: 40.0, nombre: 'Índico Muy Sur'},
+        {lat: -36.0, lon: 48.0, nombre: 'Sur Madagascar Oeste'},
+        {lat: -32.0, lon: 56.0, nombre: 'Sur Madagascar Este'},
+        {lat: -26.0, lon: 64.0, nombre: 'Índico Sur Este'},
+        {lat: -18.0, lon: 70.0, nombre: 'Índico Centro-Sur'},
+        {lat: -10.0, lon: 76.0, nombre: 'Índico Este'},
+        {lat: -5.0, lon: 81.0, nombre: 'Sur Sri Lanka'},
+        {lat: -5.0, lon: 86.0, nombre: 'Índico Sureste'},
+        {lat: -5.5, lon: 90.0, nombre: 'Camino Sur Sumatra'},
+        
+        // === SUR DE SUMATRA ===
+        {lat: -6.0, lon: 94.0, nombre: 'Sur Sumatra Oeste'},
+        {lat: -6.5, lon: 98.0, nombre: 'Sur Sumatra Centro'},
+        {lat: -7.0, lon: 102.0, nombre: 'Sur Sumatra Este'},
+        {lat: -7.0, lon: 105.0, nombre: 'Estrecho Sunda Oeste'},
+        {lat: -6.5, lon: 106.5, nombre: 'Estrecho Sunda'},
+        {lat: -5.5, lon: 108.0, nombre: 'Mar Java Este'},
+        {lat: -4.0, lon: 109.5, nombre: 'Mar Java Noreste'},
+        {lat: -2.0, lon: 110.5, nombre: 'Salida Java'},
+        {lat: 0.0, lon: 111.0, nombre: 'Ecuador'},
+        {lat: 2.5, lon: 111.0, nombre: 'Mar Sur China Este'},
+        {lat: 5.0, lon: 110.0, nombre: 'Mar Sur China Centro'},
+        {lat: 7.5, lon: 109.0, nombre: 'Mar Sur China Norte'},
+        {lat: 9.5, lon: 108.0, nombre: 'Costa Vietnam'},
+        {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
+    ],
+    
+    'DEFAULT': [
+        {lat: 32.083541, lon: -81.099834, nombre: 'Savannah'},
+        {lat: 25.0, lon: -77.0, nombre: 'Florida'},
+        {lat: 10.0, lon: -55.0, nombre: 'Caribe'},
+        {lat: 0.0, lon: -40.0, nombre: 'Atlántico'},
+        {lat: -15.0, lon: -28.0, nombre: 'Brasil'},
+        {lat: -30.0, lon: -8.0, nombre: 'África Oeste'},
+        {lat: -35.5, lon: 18.0, nombre: 'Cabo'},
+        {lat: -25.0, lon: 38.0, nombre: 'Mozambique'},
+        {lat: -10.0, lon: 43.0, nombre: 'Madagascar'},
+        {lat: 0.0, lon: 52.0, nombre: 'Índico'},
+        {lat: 4.0, lon: 80.0, nombre: 'Sri Lanka'},
+        {lat: 6.0, lon: 90.0, nombre: 'Bengala'},
+        {lat: 7.5, lon: 94.0, nombre: 'Andamán'},
+        {lat: 7.5, lon: 98.0, nombre: 'Este Andamán'},
+        {lat: 8.0, lon: 101.0, nombre: 'Golfo Tailandia'},
+        {lat: 9.0, lon: 104.0, nombre: 'Centro Golfo'},
+        {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau'}
+    ]
+};
+
 
         // ============================================
         // FUNCIÓN PARA CALCULAR POSICIÓN EN RUTA
@@ -319,6 +434,7 @@
     </script>
 </body>
 </html>
+
 
 
 
