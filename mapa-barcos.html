@@ -36,101 +36,150 @@
     <script>
 const RUTAS_MARITIMAS = {
     'HAPAG': [
-        // Savannah → Atlántico Sur → Cabo → Madagascar → Océano Índico → MAR DE ANDAMÁN → Vietnam
+        // RUTA: Savannah → Atlántico → Cabo → Canal Mozambique → Índico → OESTE/NORTE de Sumatra → Vietnam
+        
+        // === AMÉRICA ===
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
         {lat: 28.0, lon: -80.0, nombre: 'Costa Florida'},
-        {lat: 20.0, lon: -70.0, nombre: 'Atlántico Norte'},
-        {lat: 10.0, lon: -55.0, nombre: 'Costa Brasil Norte'},
-        {lat: 0.0, lon: -40.0, nombre: 'Ecuador Atlántico'},
-        {lat: -10.0, lon: -30.0, nombre: 'Costa Brasil Sur'},
-        {lat: -20.0, lon: -25.0, nombre: 'Atlántico Sur'},
-        {lat: -30.0, lon: -10.0, nombre: 'Acercamiento Cabo'},
-        {lat: -35.0, lon: 15.0, nombre: 'Oeste Cabo Buena Esperanza'},
-        {lat: -35.5, lon: 20.0, nombre: 'Cabo de Buena Esperanza'},
-        {lat: -34.0, lon: 26.0, nombre: 'Este Cabo - Océano Índico'},
-        {lat: -30.0, lon: 35.0, nombre: 'Costa Este Sudáfrica'},
-        {lat: -26.0, lon: 40.0, nombre: 'Entrada Canal Mozambique'},
-        {lat: -20.0, lon: 43.0, nombre: 'Canal Mozambique Norte'},
-        {lat: -12.0, lon: 45.0, nombre: 'Norte Madagascar'},
-        {lat: -5.0, lon: 50.0, nombre: 'Salida Canal Mozambique'},
-        {lat: 2.0, lon: 60.0, nombre: 'Océano Índico Central'},
-        {lat: 6.0, lon: 72.0, nombre: 'Sur de India'},
-        {lat: 4.0, lon: 80.0, nombre: 'Sur de Sri Lanka'},
-        {lat: 3.0, lon: 86.0, nombre: 'Océano Índico Este'},
-        {lat: 5.0, lon: 92.0, nombre: 'Golfo de Bengala Este'},  // ⬅️ MUY AL OESTE
-        {lat: 8.0, lon: 94.0, nombre: 'Mar de Andamán Sur'},     // ⬅️ OESTE de Sumatra
-        {lat: 11.0, lon: 95.0, nombre: 'Mar de Andamán Centro'}, // ⬅️ Costa OESTE de Sumatra
-        {lat: 13.0, lon: 97.0, nombre: 'Mar de Andamán Norte'},  // ⬅️ NORTE de Sumatra
-        {lat: 13.0, lon: 100.0, nombre: 'Entrada Golfo Tailandia'}, // ⬅️ Al este después de rodear
-        {lat: 11.5, lon: 102.0, nombre: 'Golfo de Tailandia'},
-        {lat: 10.5, lon: 104.0, nombre: 'Costa Vietnam'},
+        {lat: 22.0, lon: -72.0, nombre: 'Atlántico Norte'},
+        {lat: 12.0, lon: -58.0, nombre: 'Caribe Sur'},
+        {lat: 2.0, lon: -42.0, nombre: 'Ecuador Atlántico'},
+        {lat: -8.0, lon: -32.0, nombre: 'Costa Brasil'},
+        {lat: -18.0, lon: -26.0, nombre: 'Atlántico Sur'},
+        {lat: -28.0, lon: -15.0, nombre: 'Acercamiento África'},
+        
+        // === ÁFRICA ===
+        {lat: -34.0, lon: 12.0, nombre: 'Oeste Cabo'},
+        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+        {lat: -35.0, lon: 22.0, nombre: 'Este Cabo'},
+        {lat: -32.0, lon: 28.0, nombre: 'Costa SE África'},
+        {lat: -28.0, lon: 33.0, nombre: 'Durban'},
+        {lat: -24.0, lon: 36.0, nombre: 'Mozambique'},
+        {lat: -18.0, lon: 40.0, nombre: 'Canal Mozambique Sur'},
+        {lat: -12.0, lon: 42.0, nombre: 'Canal Mozambique Centro'},
+        {lat: -6.0, lon: 44.0, nombre: 'Canal Mozambique Norte'},
+        
+        // === OCÉANO ÍNDICO ===
+        {lat: 0.0, lon: 50.0, nombre: 'Norte Madagascar'},
+        {lat: 4.0, lon: 58.0, nombre: 'Océano Índico Oeste'},
+        {lat: 7.0, lon: 68.0, nombre: 'Océano Índico Central'},
+        {lat: 6.0, lon: 76.0, nombre: 'Oeste Sri Lanka'},
+        {lat: 4.0, lon: 81.0, nombre: 'Sur Sri Lanka'},
+        
+        // === GOLFO DE BENGALA Y MAR DE ANDAMÁN (CRUCIAL - OESTE DE SUMATRA) ===
+        {lat: 4.5, lon: 86.0, nombre: 'Golfo Bengala Sur'},
+        {lat: 6.0, lon: 90.0, nombre: 'Golfo Bengala Este'},
+        {lat: 8.0, lon: 92.5, nombre: 'Entrada Andamán'}, // ⬅️ OESTE de Sumatra
+        {lat: 10.0, lon: 93.5, nombre: 'Andamán Sur'}, // ⬅️ Costa OESTE Sumatra
+        {lat: 12.0, lon: 94.0, nombre: 'Andamán Centro'}, // ⬅️ Paralelo a costa oeste
+        {lat: 14.0, lon: 94.5, nombre: 'Andamán Norte'}, // ⬅️ Al norte de punta Sumatra
+        
+        // === DESPUÉS DE SUMATRA - HACIA VIETNAM ===
+        {lat: 14.5, lon: 97.0, nombre: 'Norte Sumatra - Mar Andamán'},
+        {lat: 13.5, lon: 99.5, nombre: 'Golfo Tailandia Norte'},
+        {lat: 12.0, lon: 101.0, nombre: 'Golfo Tailandia Centro'},
+        {lat: 10.5, lon: 103.5, nombre: 'Golfo Tailandia Sur'},
+        {lat: 10.2, lon: 105.5, nombre: 'Acercamiento Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
+    
     'ONE': [
-        // Ruta ONE - Estrecho de Malaca (entre Sumatra y Península Malaya)
+        // RUTA: Savannah → Atlántico → Cabo → Canal Mozambique → Índico → ESTRECHO DE MALACA → Vietnam
+        
+        // === AMÉRICA ===
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
         {lat: 28.0, lon: -80.0, nombre: 'Costa Florida'},
-        {lat: 20.0, lon: -68.0, nombre: 'Atlántico Norte'},
-        {lat: 10.0, lon: -52.0, nombre: 'Costa Brasil Norte'},
-        {lat: 0.0, lon: -38.0, nombre: 'Ecuador Atlántico'},
-        {lat: -10.0, lon: -28.0, nombre: 'Costa Brasil Sur'},
-        {lat: -20.0, lon: -22.0, nombre: 'Atlántico Sur'},
-        {lat: -30.0, lon: -8.0, nombre: 'Acercamiento Cabo'},
-        {lat: -35.0, lon: 16.0, nombre: 'Oeste Cabo Buena Esperanza'},
-        {lat: -35.5, lon: 20.0, nombre: 'Cabo de Buena Esperanza'},
-        {lat: -34.0, lon: 27.0, nombre: 'Este Cabo'},
-        {lat: -30.0, lon: 33.0, nombre: 'Costa Este Sudáfrica'},
-        {lat: -25.0, lon: 38.0, nombre: 'Entrada Canal Mozambique'},
-        {lat: -18.0, lon: 43.0, nombre: 'Canal Mozambique Centro'},
-        {lat: -11.0, lon: 48.0, nombre: 'Este de Madagascar Norte'},
-        {lat: -3.0, lon: 52.0, nombre: 'Salida Canal'},
-        {lat: 3.0, lon: 62.0, nombre: 'Océano Índico'},
-        {lat: 7.0, lon: 75.0, nombre: 'Sur de India'},
-        {lat: 5.0, lon: 82.0, nombre: 'Sur de Sri Lanka'},
-        {lat: 4.0, lon: 90.0, nombre: 'Golfo de Bengala'},
-        {lat: 5.5, lon: 95.0, nombre: 'Entrada Andamán'},
-        {lat: 6.0, lon: 98.0, nombre: 'Norte Sumatra - Oeste'},
-        {lat: 4.5, lon: 100.0, nombre: 'Entrada Estrecho Malaca Norte'},
-        {lat: 2.5, lon: 101.5, nombre: 'Estrecho de Malaca Centro'},
-        {lat: 1.3, lon: 103.8, nombre: 'Singapur'},
-        {lat: 3.0, lon: 105.0, nombre: 'Salida Estrecho'},
-        {lat: 6.0, lon: 106.0, nombre: 'Mar del Sur de China'},
-        {lat: 9.0, lon: 106.5, nombre: 'Costa Vietnam'},
+        {lat: 22.0, lon: -70.0, nombre: 'Atlántico Norte'},
+        {lat: 12.0, lon: -55.0, nombre: 'Caribe Sur'},
+        {lat: 2.0, lon: -40.0, nombre: 'Ecuador Atlántico'},
+        {lat: -8.0, lon: -30.0, nombre: 'Costa Brasil'},
+        {lat: -18.0, lon: -24.0, nombre: 'Atlántico Sur'},
+        {lat: -28.0, lon: -12.0, nombre: 'Acercamiento África'},
+        
+        // === ÁFRICA ===
+        {lat: -34.0, lon: 14.0, nombre: 'Oeste Cabo'},
+        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+        {lat: -35.0, lon: 23.0, nombre: 'Este Cabo'},
+        {lat: -32.0, lon: 29.0, nombre: 'Costa SE África'},
+        {lat: -26.0, lon: 34.0, nombre: 'Mozambique Sur'},
+        {lat: -20.0, lon: 38.0, nombre: 'Mozambique Centro'},
+        {lat: -14.0, lon: 42.0, nombre: 'Canal Mozambique'},
+        {lat: -8.0, lon: 45.0, nombre: 'Este Madagascar'},
+        
+        // === OCÉANO ÍNDICO ===
+        {lat: -2.0, lon: 50.0, nombre: 'Norte Madagascar'},
+        {lat: 2.0, lon: 58.0, nombre: 'Océano Índico Oeste'},
+        {lat: 6.0, lon: 68.0, nombre: 'Océano Índico Central'},
+        {lat: 7.0, lon: 77.0, nombre: 'Sur India'},
+        {lat: 6.0, lon: 83.0, nombre: 'Sur Sri Lanka'},
+        
+        // === GOLFO DE BENGALA ===
+        {lat: 6.5, lon: 88.0, nombre: 'Golfo Bengala Sur'},
+        {lat: 8.0, lon: 92.0, nombre: 'Golfo Bengala Este'},
+        
+        // === ENTRADA ESTRECHO DE MALACA (ENTRE SUMATRA Y MALASIA) ===
+        {lat: 7.5, lon: 95.0, nombre: 'Norte Sumatra Oeste'},
+        {lat: 6.5, lon: 97.0, nombre: 'Entrada Malaca Norte'},
+        {lat: 5.5, lon: 98.5, nombre: 'Malaca Norte'}, // ⬅️ Canal entre islas
+        {lat: 4.0, lon: 100.0, nombre: 'Malaca Centro'}, // ⬅️ Estrecho
+        {lat: 2.5, lon: 101.5, nombre: 'Malaca Sur'}, // ⬅️ Acercamiento Singapur
+        {lat: 1.3, lon: 103.8, nombre: 'Singapur'}, // ⬅️ Punto clave
+        
+        // === SALIDA MALACA - MAR DEL SUR DE CHINA ===
+        {lat: 2.0, lon: 105.0, nombre: 'Salida Malaca'},
+        {lat: 4.0, lon: 106.0, nombre: 'Mar Sur China Sur'},
+        {lat: 7.0, lon: 106.5, nombre: 'Mar Sur China Centro'},
+        {lat: 9.5, lon: 106.8, nombre: 'Costa Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
+    
     'ZIN': [
-        // Ruta ZIN - SUR de Sumatra (Estrecho de Sunda)
+        // RUTA: Savannah → Atlántico → Cabo → SUR de Madagascar → SUR de Sumatra → Vietnam
+        
+        // === AMÉRICA ===
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
-        {lat: 28.0, lon: -79.0, nombre: 'Costa Florida'},
-        {lat: 20.0, lon: -65.0, nombre: 'Atlántico Norte'},
-        {lat: 10.0, lon: -50.0, nombre: 'Costa Brasil Norte'},
-        {lat: 0.0, lon: -35.0, nombre: 'Ecuador Atlántico'},
-        {lat: -10.0, lon: -25.0, nombre: 'Costa Brasil Sur'},
-        {lat: -20.0, lon: -20.0, nombre: 'Atlántico Sur'},
-        {lat: -30.0, lon: -5.0, nombre: 'Acercamiento Cabo'},
-        {lat: -35.0, lon: 17.0, nombre: 'Oeste Cabo Buena Esperanza'},
-        {lat: -35.5, lon: 20.0, nombre: 'Cabo de Buena Esperanza'},
-        {lat: -36.0, lon: 25.0, nombre: 'Este Cabo'},
-        {lat: -37.0, lon: 32.0, nombre: 'Ruta Sur de Sudáfrica'},
-        {lat: -38.0, lon: 40.0, nombre: 'Océano Índico Sur'},
-        {lat: -36.0, lon: 50.0, nombre: 'Sur de Madagascar'},
-        {lat: -30.0, lon: 60.0, nombre: 'Este de Madagascar'},
-        {lat: -20.0, lon: 68.0, nombre: 'Océano Índico Este'},
-        {lat: -10.0, lon: 75.0, nombre: 'Océano Índico Central'},
-        {lat: -5.0, lon: 82.0, nombre: 'Sur de Sri Lanka'},
-        {lat: -4.0, lon: 90.0, nombre: 'Océano Índico Sureste'},
-        {lat: -5.0, lon: 97.0, nombre: 'SUR de Sumatra Oeste'},
-        {lat: -6.0, lon: 103.0, nombre: 'SUR de Sumatra Este'},
-        {lat: -6.5, lon: 105.5, nombre: 'Estrecho de Sunda'},
-        {lat: -6.0, lon: 108.0, nombre: 'Mar de Java'},
-        {lat: -3.0, lon: 110.0, nombre: 'Norte Mar de Java'},
-        {lat: 1.0, lon: 110.5, nombre: 'Mar del Sur de China Sur'},
-        {lat: 5.0, lon: 109.5, nombre: 'Mar del Sur de China'},
-        {lat: 8.0, lon: 108.0, nombre: 'Costa Vietnam Sur'},
+        {lat: 28.0, lon: -79.5, nombre: 'Costa Florida'},
+        {lat: 22.0, lon: -68.0, nombre: 'Atlántico Norte'},
+        {lat: 12.0, lon: -52.0, nombre: 'Caribe Sur'},
+        {lat: 2.0, lon: -38.0, nombre: 'Ecuador Atlántico'},
+        {lat: -8.0, lon: -28.0, nombre: 'Costa Brasil'},
+        {lat: -18.0, lon: -22.0, nombre: 'Atlántico Sur'},
+        {lat: -28.0, lon: -10.0, nombre: 'Acercamiento África'},
+        
+        // === ÁFRICA ===
+        {lat: -34.0, lon: 15.0, nombre: 'Oeste Cabo'},
+        {lat: -35.8, lon: 18.0, nombre: 'Cabo Buena Esperanza'},
+        {lat: -36.0, lon: 23.0, nombre: 'Este Cabo'},
+        {lat: -37.0, lon: 30.0, nombre: 'Sur Sudáfrica'},
+        {lat: -38.0, lon: 38.0, nombre: 'Índico Sur Profundo'},
+        
+        // === SUR DE MADAGASCAR ===
+        {lat: -37.0, lon: 48.0, nombre: 'Sur Madagascar Oeste'},
+        {lat: -32.0, lon: 56.0, nombre: 'Sur Madagascar Este'},
+        {lat: -25.0, lon: 64.0, nombre: 'Índico Sur Este'},
+        {lat: -18.0, lon: 70.0, nombre: 'Índico Central Sur'},
+        {lat: -10.0, lon: 76.0, nombre: 'Índico Este'},
+        {lat: -5.0, lon: 82.0, nombre: 'Sur Sri Lanka'},
+        
+        // === OCÉANO ÍNDICO SUR - HACIA SUR DE SUMATRA ===
+        {lat: -5.0, lon: 88.0, nombre: 'Índico Sureste'},
+        {lat: -5.5, lon: 94.0, nombre: 'Sur Sumatra Oeste'}, // ⬅️ SUR de Sumatra
+        {lat: -6.0, lon: 100.0, nombre: 'Sur Sumatra Centro'}, // ⬅️ Bordeando sur
+        {lat: -6.5, lon: 105.0, nombre: 'Estrecho Sunda'}, // ⬅️ Entre Sumatra y Java
+        
+        // === NORTE - MAR DE JAVA Y MAR DEL SUR DE CHINA ===
+        {lat: -5.0, lon: 108.0, nombre: 'Mar de Java Este'},
+        {lat: -3.0, lon: 110.0, nombre: 'Salida Java'},
+        {lat: 0.0, lon: 111.0, nombre: 'Ecuador Pacífico'},
+        {lat: 3.0, lon: 111.0, nombre: 'Mar Sur China Este'},
+        {lat: 6.0, lon: 110.0, nombre: 'Mar Sur China Centro'},
+        {lat: 8.5, lon: 108.5, nombre: 'Costa Vietnam Este'},
+        {lat: 10.0, lon: 107.5, nombre: 'Acercamiento Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ],
+    
     'DEFAULT': [
-        // Ruta por defecto
+        // Ruta por defecto - similar a HAPAG
         {lat: 32.083541, lon: -81.099834, nombre: 'Savannah (Origen)'},
         {lat: 28.0, lon: -80.0, nombre: 'Costa Florida'},
         {lat: 20.0, lon: -68.0, nombre: 'Atlántico Norte'},
@@ -145,20 +194,21 @@ const RUTAS_MARITIMAS = {
         {lat: -30.0, lon: 35.0, nombre: 'Costa Este Sudáfrica'},
         {lat: -25.0, lon: 42.0, nombre: 'Entrada Canal Mozambique'},
         {lat: -15.0, lon: 45.0, nombre: 'Canal Mozambique'},
-        {lat: -8.0, lon: 48.0, nombre: 'Norte de Madagascar'},
-        {lat: 0.0, lon: 55.0, nombre: 'Océano Índico'},
+        {lat: -5.0, lon: 48.0, nombre: 'Norte de Madagascar'},
+        {lat: 2.0, lon: 55.0, nombre: 'Océano Índico'},
         {lat: 6.0, lon: 70.0, nombre: 'Centro Índico'},
         {lat: 4.0, lon: 80.0, nombre: 'Sur de Sri Lanka'},
-        {lat: 3.0, lon: 88.0, nombre: 'Golfo de Bengala'},
-        {lat: 6.0, lon: 93.0, nombre: 'Este Golfo Bengala'},
-        {lat: 9.0, lon: 95.0, nombre: 'Mar de Andamán'},
-        {lat: 12.0, lon: 96.0, nombre: 'Norte de Sumatra'},
-        {lat: 12.0, lon: 99.0, nombre: 'Entrada Golfo Tailandia'},
-        {lat: 10.0, lon: 102.0, nombre: 'Golfo de Tailandia'},
-        {lat: 10.0, lon: 105.0, nombre: 'Costa Vietnam'},
+        {lat: 5.0, lon: 88.0, nombre: 'Golfo de Bengala'},
+        {lat: 8.0, lon: 92.5, nombre: 'Andamán'},
+        {lat: 11.0, lon: 94.0, nombre: 'Mar de Andamán'},
+        {lat: 13.0, lon: 95.0, nombre: 'Norte de Sumatra'},
+        {lat: 13.0, lon: 98.0, nombre: 'Entrada Tailandia'},
+        {lat: 11.0, lon: 101.0, nombre: 'Golfo de Tailandia'},
+        {lat: 10.5, lon: 104.0, nombre: 'Costa Vietnam'},
         {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau (Destino)'}
     ]
 };
+
  
         // ============================================
         // FUNCIÓN PARA CALCULAR POSICIÓN EN RUTA
@@ -390,6 +440,7 @@ const RUTAS_MARITIMAS = {
     </script>
 </body>
 </html>
+
 
 
 
