@@ -40,7 +40,7 @@
         const PUERTOS = {
             'SAVANNAH': {lat: 32.083541, lon: -81.099834, nombre: 'Savannah, GA'},
             'CHARLESTON': {lat: 32.776566, lon: -79.931051, nombre: 'Charleston, SC'},
-            'HO_CHI_MIN': {lat: 10.757570, lon: 106.720700, nombre: 'Ho Chi Minh City (Vung Tau)'},
+            'HO_CHI_MIN': {lat: 10.757570, lon: 106.720700, nombre: 'Ho Chi Minh City'},
             'VUNG_TAU': {lat: 10.757570, lon: 106.720700, nombre: 'Vung Tau, Vietnam'}
         };
         
@@ -50,13 +50,118 @@
         function normalizarPuerto(nombre) {
             nombre = nombre.toUpperCase().replace(/\s+/g, '_');
             
-            // Mapeo de nombres comunes
             if (nombre.includes('SAVANNAH')) return 'SAVANNAH';
             if (nombre.includes('CHARLESTON')) return 'CHARLESTON';
             if (nombre.includes('HO_CHI') || nombre.includes('HOCHIMINH')) return 'HO_CHI_MIN';
             if (nombre.includes('VUNG_TAU')) return 'VUNG_TAU';
             
             return nombre;
+        }
+        
+        // ============================================
+        // FUNCIÓN PARA CALCULAR PROGRESO DEL BARCO
+        // ============================================
+        function calcularProgresoBarco(etdString) {
+            try {
+                var partes = etdString.split('/');
+                var dia = parseInt(partes[0]);
+                var mes = parseInt(partes[1]) - 1;
+                var año = parseInt('20' + partes[2]);
+                
+                var etd = new Date(año, mes, dia);
+                var ahora = new Date();
+                
+                var diasTranscurridos = Math.floor((ahora - etd) / (1000 * 60 * 60 * 24));
+                var diasTotalesViaje = 45; // Aproximado USA → Vietnam
+                
+                var progreso = Math.min(100, Math.max(0, (diasTranscurridos / diasTotalesViaje) * 100));
+                
+                return {
+                    progreso: progreso,
+                    diasTranscurridos: Math.max(0, diasTranscurridos),
+                    diasTotales: diasTotalesViaje
+                };
+            } catch (e) {
+                console.error('Error calculando progreso:', e);
+                return {progreso: 50, diasTranscurridos: 0, diasTotales: 45};
+            }
+        }
+        
+        // ============================================
+        // FUNCIÓN PARA AJUSTAR COORDENADAS (EMPUJAR AL MAR)
+        // ============================================
+        function ajustarCoordenadasMaritimas(lat, lon) {
+            console.log('Verificando coordenadas:', lat, lon);
+            
+            // MADAGASCAR
+            if (lon >= 43 && lon <= 51 && lat >= -26 && lat <= -11) {
+                console.log('❌ Sobre Madagascar - Empujando al ESTE');
+                return { lat: lat, lon: 52.0 };
+            }
+            
+            // COSTA ESTE DE ÁFRICA
+            if (lon >= 32 && lon < 43 && lat >= -28 && lat <= -10) {
+                if (lon < 35) {
+                    console.log('⚠️ Muy pegado a costa África');
+                    return { lat: lat, lon: 35.0 };
+                }
+            }
+            
+            // SUMATRA
+            if (lon >= 95 && lon <= 106 && lat >= -6 && lat <= 6) {
+                console.log('❌ Sobre SUMATRA');
+                
+                if (lat > 0 && lat < 6) {
+                    return { lat: lat, lon: 94.0 };  // Mar de Andamán
+                }
+                
+                if (lat <= 0) {
+                    return { lat: -7.5, lon: lon };  // Sur de Sumatra
+                }
+            }
+            
+            // TAILANDIA/MYANMAR CONTINENTAL
+            if (lon >= 99 && lon <= 105 && lat >= 5 && lat <= 15) {
+                console.log('❌ Sobre Tailandia Continental');
+                
+                if (lat > 10) {
+                    return { lat: lat, lon: 98.0 };
+                }
+                
+                return { lat: lat, lon: 105.5 };
+            }
+            
+            // JAVA
+            if (lon >= 105 && lon <= 115 && lat >= -9 && lat <= -5) {
+                console.log('❌ Sobre JAVA - Empujando al sur');
+                return { lat: -9.5, lon: lon };
+            }
+            
+            // BORNEO/KALIMANTAN
+            if (lon >= 108 && lon <= 119 && lat >= -5 && lat <= 7) {
+                console.log('❌ Sobre BORNEO');
+                
+                if (lon < 113) {
+                    return { lat: lat, lon: 107.5 };
+                }
+                
+                if (lat > 2) {
+                    return { lat: lat, lon: 119.5 };
+                } else {
+                    return { lat: -5.5, lon: lon };
+                }
+            }
+            
+            // PENÍNSULA MALAYA
+            if (lon >= 100 && lon <= 104 && lat >= 1 && lat <= 7) {
+                if (lon > 102.5 && lat > 5) {
+                    console.log('⚠️ Sobre Península Malaya');
+                    return { lat: lat, lon: 102.0 };
+                }
+            }
+            
+            console.log('✅ Coordenadas OK');
+            return { lat: lat, lon: lon };
         }
         
         // ============================================
@@ -71,7 +176,6 @@
                 return null;
             }
             
-            // Definir waypoints base según origen-destino
             var rutaBase = [];
             
             // SAVANNAH → VIETNAM
@@ -88,7 +192,6 @@
                     {lat: 4.0, lon: 86.0}, {lat: 5.0, lon: 89.0}
                 ];
             }
-            
             // CHARLESTON → VIETNAM
             else if (normalizarPuerto(origen) === 'CHARLESTON' && normalizarPuerto(destino) === 'HO_CHI_MIN') {
                 rutaBase = [
@@ -104,7 +207,7 @@
                 ];
             }
             
-            // Agregar waypoints específicos según naviera en la región de Asia
+            // Agregar segmento final según naviera
             if (naviera.toUpperCase() === 'HAPAG') {
                 rutaBase = rutaBase.concat([
                     {lat: 6.0, lon: 91.0}, {lat: 6.5, lon: 92.5}, {lat: 7.0, lon: 93.5},
@@ -135,7 +238,6 @@
                 ]);
             }
             else {
-                // Ruta DEFAULT
                 rutaBase = rutaBase.concat([
                     {lat: 6.0, lon: 90.0}, {lat: 8.0, lon: 94.0}, {lat: 9.0, lon: 98.0},
                     {lat: 9.5, lon: 102.0}, {lat: 10.0, lon: 105.0}, puertoDestino
@@ -143,53 +245,6 @@
             }
             
             return rutaBase;
-        }
-        
-        // ============================================
-        // FUNCIÓN PARA AJUSTAR COORDENADAS MÍNIMAMENTE
-        // ============================================
-        function ajustarCoordenadasMaritimas(lat, lon) {
-            // MADAGASCAR
-            if (lon >= 43 && lon <= 51 && lat >= -26 && lat <= -11) {
-                return { lat: lat, lon: 52.0 };
-            }
-            
-            // SUMATRA
-            if (lon >= 95 && lon <= 106 && lat >= -6 && lat <= 6) {
-                if (lat > 0 && lat < 6) {
-                    return { lat: lat, lon: 94.0 };
-                }
-                if (lat <= 0) {
-                    return { lat: -7.5, lon: lon };
-                }
-            }
-            
-            // TAILANDIA CONTINENTAL
-            if (lon >= 99 && lon <= 105 && lat >= 5 && lat <= 15) {
-                if (lat > 10) {
-                    return { lat: lat, lon: 98.0 };
-                }
-                return { lat: lat, lon: 105.5 };
-            }
-            
-            // JAVA
-            if (lon >= 105 && lon <= 115 && lat >= -9 && lat <= -5) {
-                return { lat: -9.5, lon: lon };
-            }
-            
-            // BORNEO
-            if (lon >= 108 && lon <= 119 && lat >= -5 && lat <= 7) {
-                if (lon < 113) {
-                    return { lat: lat, lon: 107.5 };
-                }
-                if (lat > 2) {
-                    return { lat: lat, lon: 119.5 };
-                } else {
-                    return { lat: -5.5, lon: lon };
-                }
-            }
-            
-            return { lat: lat, lon: lon };
         }
         
         // ============================================
@@ -242,7 +297,7 @@
                 var parts = op.split('|');
                 
                 if (parts.length !== 8) {
-                    console.warn('Formato inválido:', op, '- Se esperaban 8 campos');
+                    console.warn('Formato inválido:', op);
                     return;
                 }
                 
@@ -263,7 +318,7 @@
                     return;
                 }
                 
-                // Ajustar coordenadas
+                // ✨ AJUSTAR COORDENADAS PARA EVITAR TIERRA
                 var coordAjustadas = ajustarCoordenadasMaritimas(lat, lon);
                 lat = coordAjustadas.lat;
                 lon = coordAjustadas.lon;
@@ -290,7 +345,9 @@
                 barcosPorETD[claveBarco].totalContainers += parseInt(containers) || 0;
             });
             
-            // Agregar marcadores de puertos usados
+            // ============================================
+            // AGREGAR MARCADORES DE PUERTOS
+            // ============================================
             puertosUsados.forEach(function(nombrePuerto) {
                 var puertoNormalizado = normalizarPuerto(nombrePuerto);
                 var puerto = PUERTOS[puertoNormalizado];
@@ -303,7 +360,38 @@
                 }
             });
             
-            // Colores por naviera
+            // ============================================
+            // DIBUJAR LÍNEAS DIRECTAS PUERTO-A-PUERTO (GRIS)
+            // ============================================
+            var rutasPuertosUnicos = new Set();
+            
+            Object.values(barcosPorETD).forEach(function(barco) {
+                var puertoOrigen = PUERTOS[normalizarPuerto(barco.origen)];
+                var puertoDestino = PUERTOS[normalizarPuerto(barco.destino)];
+                
+                if (puertoOrigen && puertoDestino) {
+                    var claveRuta = barco.origen + '_' + barco.destino;
+                    
+                    if (!rutasPuertosUnicos.has(claveRuta)) {
+                        rutasPuertosUnicos.add(claveRuta);
+                        
+                        // ⬅️ LÍNEA DIRECTA PUERTO-A-PUERTO (GRIS SÓLIDO)
+                        L.polyline([
+                            [puertoOrigen.lat, puertoOrigen.lon],
+                            [puertoDestino.lat, puertoDestino.lon]
+                        ], {
+                            color: '#999999',      // ⬅️ Gris
+                            weight: 2,
+                            opacity: 0.4,
+                            dashArray: '5, 5'      // ⬅️ Línea punteada
+                        }).addTo(map);
+                    }
+                }
+            });
+            
+            // ============================================
+            // COLORES POR NAVIERA
+            // ============================================
             var colorRuta = {
                 'HAPAG': '#FF6600',
                 'ONE': '#DC0032',
@@ -311,13 +399,15 @@
                 'DEFAULT': '#666666'
             };
             
-            // Crear barcos y rutas
+            // ============================================
+            // CREAR BARCOS Y RUTAS DE NAVIERAS
+            // ============================================
             Object.values(barcosPorETD).forEach(function(barco) {
-                // Obtener ruta específica
+                // Obtener ruta específica de la naviera
                 var rutaBarco = obtenerRuta(barco.origen, barco.destino, barco.naviera);
                 
                 if (rutaBarco && rutaBarco.length > 0) {
-                    // Dibujar ruta
+                    // ⬅️ DIBUJAR RUTA DE NAVIERA (COLOR SEGÚN NAVIERA)
                     var coordenadasRuta = rutaBarco.map(function(punto) {
                         return [punto.lat, punto.lon];
                     });
@@ -330,12 +420,15 @@
                     }).addTo(map);
                 }
                 
-                // Crear popup
+                // ✨ CALCULAR PROGRESO DEL VIAJE
+                var progresoInfo = calcularProgresoBarco(barco.etd);
+                
+                // Crear lista de operaciones
                 var operacionesList = barco.operaciones.map(function(op) {
                     return '<div class="operacion-item">📦 ' + op.nombre + ' (' + op.containers + ' cont.)</div>';
                 }).join('');
                 
-                // Marcador del barco
+                // ✨ MARCADOR DEL BARCO CON PROGRESO
                 L.marker([barco.lat, barco.lon], {icon: shipIcon})
                     .bindPopup(
                         '<b>🚢 Ship - Exit: ' + barco.etd + '</b><br>' +
@@ -343,6 +436,8 @@
                         '<div style="margin: 5px 0;"><b>🏁 From:</b> ' + barco.origen + '</div>' +
                         '<div style="margin: 5px 0;"><b>🎯 To:</b> ' + barco.destino + '</div>' +
                         '<b>Total Containers: ' + barco.totalContainers + '</b><br>' +
+                        '<b>📍 Progress: ' + progresoInfo.progreso.toFixed(1) + '%</b><br>' +
+                        '<small>(' + progresoInfo.diasTranscurridos + ' days / ' + progresoInfo.diasTotales + ' days estimated)</small>' +
                         '<hr style="margin: 8px 0;">' +
                         '<b>Onboard Operations (' + barco.operaciones.length + '):</b><br>' +
                         operacionesList +
@@ -355,7 +450,9 @@
                 bounds.push([barco.lat, barco.lon]);
             });
             
-            // Ajustar vista
+            // ============================================
+            // AJUSTAR VISTA DEL MAPA
+            // ============================================
             if (bounds.length > 0) {
                 map.fitBounds(bounds, {padding: [50, 50]});
             }
