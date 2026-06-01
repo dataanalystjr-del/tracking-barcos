@@ -208,7 +208,7 @@
             ];
 
             // ============================================
-            // TRAMO FINAL: ESTRECHO DE MALACA Y ASIA (AJUSTADO PARA NO TOCAR SUMATRA)
+            // TRAMO FINAL: ESTRECHO DE MALACA Y RÍO DE HO CHI MINH
             // ============================================
             var rutaEstrechoMalaca = [
                 {lat: 6.2, lon: 95.0},   // Entrando por encima de Sabang (Norte de Sumatra)
@@ -219,8 +219,12 @@
                 {lat: 1.1, lon: 103.4},  // Sur de Singapur (bordeando por agua)
                 {lat: 1.3, lon: 104.4},  // Rodeando Singapur hacia el Mar de China
                 {lat: 4.0, lon: 105.5},  // Mar de China Meridional
-                {lat: 8.0, lon: 106.5},  // Subiendo costa de Vietnam
-                puertoDestino
+                {lat: 8.0, lon: 106.5},  // Mar de China, sur de Vietnam
+                {lat: 9.5, lon: 107.0},  // Rodeando el delta del Mekong por mar abierto
+                {lat: 10.35, lon: 107.03}, // Entrada a la bahía de Ganh Rai (Vung Tau)
+                {lat: 10.45, lon: 106.85}, // Navegando por el río hacia Ho Chi Minh
+                {lat: 10.65, lon: 106.75}, // Río arriba, cerca de la ciudad
+                puertoDestino            // Llegada exacta al puerto
             ];
 
             // ============================================
@@ -396,7 +400,7 @@
                 L.polyline(coordenadasRuta, {
                     color: colorRuta[barco.naviera] || colorRuta['DEFAULT'],
                     weight: 3,
-                    opacity: 0.9, // Aumenté un poco la opacidad para que resalte más
+                    opacity: 0.9,
                     dashArray: '10, 10'
                 }).addTo(map);
                 
