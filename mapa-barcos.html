@@ -208,10 +208,11 @@
             ];
 
             // ============================================
-            // TRAMO FINAL: ESTRECHO DE MALACA Y ASIA (MUY PRECISO PARA EVITAR TIERRA)
+            // TRAMO FINAL: ESTRECHO DE MALACA Y ASIA (AJUSTADO PARA NO TOCAR SUMATRA)
             // ============================================
             var rutaEstrechoMalaca = [
-                {lat: 6.0, lon: 95.0},   // Navegando por el norte de Sumatra (Sabang)
+                {lat: 6.2, lon: 95.0},   // Entrando por encima de Sabang (Norte de Sumatra)
+                {lat: 5.5, lon: 97.5},   // Bordeando la "barriga" de Lhokseumawe por agua
                 {lat: 4.5, lon: 99.0},   // Entrando al Estrecho de Malaca
                 {lat: 2.8, lon: 101.0},  // Centro del Estrecho de Malaca
                 {lat: 1.8, lon: 102.3},  // Acercándose al sur de Malasia
@@ -371,16 +372,16 @@
                 'HAPAG': '#FF6600',
                 'ONE': '#DC0032',
                 'ZIN': '#0066CC',
-                'MSC': '#FFCC00',   // Amarillo MSC
-                'MAERSK': '#42B4E6',// Azul Claro Maersk
-                'DEFAULT': '#666666'
+                'MSC': '#FFCC00',   
+                'MAERSK': '#0033CC', // Azul fuerte para máximo contraste con el agua
+                'DEFAULT': '#333333'
             };
             
             // ============================================
             // CREAR BARCOS Y RUTAS DE NAVIERAS
             // ============================================
             Object.values(barcosPorETD).forEach(function(barco) {
-                var rutaBarco = obtenerRuta(barco.origen, barco.destino); // Ya no pasamos la naviera para la ruta, la ruta es fija
+                var rutaBarco = obtenerRuta(barco.origen, barco.destino); 
                 
                 if (!rutaBarco || rutaBarco.length === 0) {
                     console.warn('No se pudo obtener ruta para:', barco);
@@ -395,7 +396,7 @@
                 L.polyline(coordenadasRuta, {
                     color: colorRuta[barco.naviera] || colorRuta['DEFAULT'],
                     weight: 3,
-                    opacity: 0.7,
+                    opacity: 0.9, // Aumenté un poco la opacidad para que resalte más
                     dashArray: '10, 10'
                 }).addTo(map);
                 
