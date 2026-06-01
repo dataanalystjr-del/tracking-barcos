@@ -192,41 +192,38 @@
             var destinoNorm = normalizarPuerto(destino);
             
             // ============================================
-            // RUTA DESDE ESTADOS UNIDOS
+            // TRAMO COMÚN: SUR DE ÁFRICA Y CANAL DE MOZAMBIQUE (CORREGIDO PARA EVITAR TIERRA)
+            // ============================================
+            var rutaAfricaAsia = [
+                {lat: -35.8, lon: 18.0}, // Cabo de Buena Esperanza
+                // Alejados de la costa, navegando por el centro del Canal de Mozambique
+                {lat: -35.2, lon: 21.5}, {lat: -34.0, lon: 26.5}, {lat: -31.5, lon: 31.0},
+                {lat: -27.5, lon: 35.0}, {lat: -22.0, lon: 39.0}, {lat: -18.0, lon: 41.5}, // Nampula / Mahajanga
+                {lat: -13.0, lon: 43.5}, // Pasando cerca de Comoras
+                {lat: -8.0, lon: 45.5}, {lat: -3.0, lon: 48.0}, {lat: 0.0, lon: 51.0},
+                // Océano Índico
+                {lat: 2.0, lon: 54.0}, {lat: 3.5, lon: 59.0}, {lat: 4.5, lon: 65.0}, 
+                {lat: 5.0, lon: 71.0}, {lat: 5.5, lon: 77.0}, {lat: 6.0, lon: 80.5} // Sri Lanka
+            ];
+
+            // ============================================
+            // RUTAS DESDE ESTADOS UNIDOS
             // ============================================
             if (origenNorm === 'SAVANNAH' && destinoNorm === 'HO_CHI_MIN') {
                 rutaBase = [
                     puertoOrigen,
                     {lat: 28.0, lon: -78.0}, {lat: 22.0, lon: -68.0}, {lat: 15.0, lon: -58.0},
                     {lat: 5.0, lon: -45.0}, {lat: -5.0, lon: -35.0}, {lat: -15.0, lon: -28.0},
-                    {lat: -25.0, lon: -20.0}, {lat: -32.0, lon: -5.0}, {lat: -35.0, lon: 12.0},
-                    {lat: -35.8, lon: 18.0}, // Cabo de Buena Esperanza
-                    {lat: -35.2, lon: 21.5}, {lat: -34.5, lon: 24.0}, {lat: -34.0, lon: 26.5},
-                    {lat: -33.0, lon: 28.5}, {lat: -31.5, lon: 30.5}, {lat: -29.8, lon: 32.0},
-                    {lat: -27.5, lon: 33.5}, {lat: -25.0, lon: 35.0}, {lat: -22.0, lon: 36.5},
-                    {lat: -18.0, lon: 38.0}, {lat: -15.0, lon: 39.5}, {lat: -12.0, lon: 41.0},
-                    {lat: -9.0, lon: 42.5}, {lat: -6.0, lon: 44.0}, {lat: -3.0, lon: 46.0},
-                    {lat: 0.0, lon: 49.0}, {lat: 2.0, lon: 54.0}, {lat: 3.5, lon: 59.0},
-                    {lat: 4.5, lon: 65.0}, {lat: 5.0, lon: 71.0}, {lat: 5.5, lon: 77.0},
-                    {lat: 6.0, lon: 80.5} // Sri Lanka
-                ];
+                    {lat: -25.0, lon: -20.0}, {lat: -32.0, lon: -5.0}, {lat: -35.0, lon: 12.0}
+                ].concat(rutaAfricaAsia);
             }
             else if (origenNorm === 'CHARLESTON' && destinoNorm === 'HO_CHI_MIN') {
                 rutaBase = [
                     puertoOrigen,
                     {lat: 30.0, lon: -78.5}, {lat: 24.0, lon: -70.0}, {lat: 16.0, lon: -60.0},
                     {lat: 6.0, lon: -46.0}, {lat: -4.0, lon: -36.0}, {lat: -14.0, lon: -29.0},
-                    {lat: -24.0, lon: -21.0}, {lat: -31.0, lon: -6.0}, {lat: -35.0, lon: 12.0},
-                    {lat: -35.8, lon: 18.0}, // Cabo de Buena Esperanza
-                    {lat: -35.2, lon: 21.5}, {lat: -34.5, lon: 24.0}, {lat: -34.0, lon: 26.5},
-                    {lat: -33.0, lon: 28.5}, {lat: -31.5, lon: 30.5}, {lat: -29.8, lon: 32.0},
-                    {lat: -27.5, lon: 33.5}, {lat: -25.0, lon: 35.0}, {lat: -22.0, lon: 36.5},
-                    {lat: -18.0, lon: 38.0}, {lat: -15.0, lon: 39.5}, {lat: -12.0, lon: 41.0},
-                    {lat: -9.0, lon: 42.5}, {lat: -6.0, lon: 44.0}, {lat: -3.0, lon: 46.0},
-                    {lat: 0.0, lon: 49.0}, {lat: 2.0, lon: 54.0}, {lat: 3.5, lon: 59.0},
-                    {lat: 4.5, lon: 65.0}, {lat: 5.0, lon: 71.0}, {lat: 5.5, lon: 77.0},
-                    {lat: 6.0, lon: 80.5} // Sri Lanka
-                ];
+                    {lat: -24.0, lon: -21.0}, {lat: -31.0, lon: -6.0}, {lat: -35.0, lon: 12.0}
+                ].concat(rutaAfricaAsia);
             }
             // ============================================
             // NUEVA RUTA DESDE BRASIL
@@ -235,31 +232,14 @@
                 rutaBase = [
                     puertoOrigen,
                     // Atlántico Sur hacia Sudáfrica
-                    {lat: -27.0, lon: -40.0},
-                    {lat: -29.0, lon: -30.0},
-                    {lat: -31.0, lon: -20.0},
-                    {lat: -33.0, lon: -5.0},
-                    {lat: -35.0, lon: 12.0},
-                    {lat: -35.8, lon: 18.0}, // Cabo de Buena Esperanza
-                    
-                    // Costa Este Sudáfrica (100km offshore)
-                    {lat: -35.2, lon: 21.5}, {lat: -34.5, lon: 24.0}, {lat: -34.0, lon: 26.5},
-                    {lat: -33.0, lon: 28.5}, {lat: -31.5, lon: 30.5}, {lat: -29.8, lon: 32.0},
-                    {lat: -27.5, lon: 33.5}, {lat: -25.0, lon: 35.0}, {lat: -22.0, lon: 36.5},
-                    {lat: -18.0, lon: 38.0}, {lat: -15.0, lon: 39.5}, {lat: -12.0, lon: 41.0},
-                    {lat: -9.0, lon: 42.5}, {lat: -6.0, lon: 44.0}, {lat: -3.0, lon: 46.0},
-                    
-                    // Océano Índico Oeste
-                    {lat: 0.0, lon: 49.0}, {lat: 2.0, lon: 54.0}, {lat: 3.5, lon: 59.0},
-                    {lat: 4.5, lon: 65.0}, {lat: 5.0, lon: 71.0}, {lat: 5.5, lon: 77.0},
-                    {lat: 6.0, lon: 80.5} // Sri Lanka
-                ];
+                    {lat: -27.0, lon: -40.0}, {lat: -29.0, lon: -30.0}, {lat: -31.0, lon: -20.0},
+                    {lat: -33.0, lon: -5.0}, {lat: -35.0, lon: 12.0}
+                ].concat(rutaAfricaAsia);
             }
             
             // ============================================
             // SEGMENTO FINAL SIMPLIFICADO ASIA
             // ============================================
-            
             if (naviera.toUpperCase() === 'HAPAG') {
                 rutaBase = rutaBase.concat([
                     {lat: 6.5, lon: 85.0}, {lat: 6.5, lon: 90.0}, {lat: 6.0, lon: 95.0},
@@ -284,8 +264,6 @@
                     {lat: 7.0, lon: 106.7}, {lat: 9.5, lon: 106.7}, puertoDestino
                 ]);
             }
-            // Agregamos MSC/MAERSK al flujo genérico si no necesitan puntos extra específicos 
-            // (puedes personalizarlos más tarde si quieres rutas exactas distintas en Asia)
             else {
                 rutaBase = rutaBase.concat([
                     {lat: 6.0, lon: 85.0}, {lat: 5.5, lon: 90.0}, {lat: 4.5, lon: 95.0},
