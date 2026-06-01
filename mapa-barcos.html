@@ -192,15 +192,16 @@
             var destinoNorm = normalizarPuerto(destino);
             
             // ============================================
-            // TRAMO COMÚN: SUR DE ÁFRICA Y CANAL DE MOZAMBIQUE (CORREGIDO PARA EVITAR TIERRA)
+            // TRAMO COMÚN: SUR DE ÁFRICA Y CANAL DE MOZAMBIQUE (CORREGIDO PARA EVITAR ISLAS COMORAS)
             // ============================================
             var rutaAfricaAsia = [
                 {lat: -35.8, lon: 18.0}, // Cabo de Buena Esperanza
                 // Alejados de la costa, navegando por el centro del Canal de Mozambique
                 {lat: -35.2, lon: 21.5}, {lat: -34.0, lon: 26.5}, {lat: -31.5, lon: 31.0},
-                {lat: -27.5, lon: 35.0}, {lat: -22.0, lon: 39.0}, {lat: -18.0, lon: 41.5}, // Nampula / Mahajanga
-                {lat: -13.0, lon: 43.5}, // Pasando cerca de Comoras
-                {lat: -8.0, lon: 45.5}, {lat: -3.0, lon: 48.0}, {lat: 0.0, lon: 51.0},
+                {lat: -27.5, lon: 35.0}, {lat: -22.0, lon: 39.0}, {lat: -17.0, lon: 41.0}, // Centro del Canal
+                // Pasando por el OESTE de las Islas Comoras (evitando tierra)
+                {lat: -12.5, lon: 42.0}, {lat: -8.0, lon: 44.0}, 
+                {lat: -3.0, lon: 48.0}, {lat: 0.0, lon: 51.0},
                 // Océano Índico
                 {lat: 2.0, lon: 54.0}, {lat: 3.5, lon: 59.0}, {lat: 4.5, lon: 65.0}, 
                 {lat: 5.0, lon: 71.0}, {lat: 5.5, lon: 77.0}, {lat: 6.0, lon: 80.5} // Sri Lanka
